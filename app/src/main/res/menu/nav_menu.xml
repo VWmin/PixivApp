@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+
+    <group
+        android:id="@+id/menu_group_user"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_item_following"
+            android:icon="@drawable/ic_people_black_24dp"
+            android:title="@string/following"/>
+        <item
+            android:id="@+id/menu_item_recommend_users"
+            android:icon="@drawable/ic_person_add_black_24dp"
+            android:title="@string/recommend_user" />
+        <item
+            android:id="@+id/menu_item_favorite"
+            android:icon="@drawable/ic_favorite_white_24dp"
+            android:title="@string/favorite" />
+        <item
+            android:id="@+id/menu_item_hot_tags"
+            android:icon="@drawable/tag"
+            android:title="@string/hot_tags" />
+        <item
+            android:id="@+id/menu_item_history"
+            android:icon="@drawable/ic_history_black_24dp"
+            android:title="@string/view_history" />
+
+    </group>
+
+    <group
+        android:id="@+id/menu_group_setting"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_item_setting"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/setting" />
+        <item
+            android:id="@+id/menu_item_about"
+            android:icon="@drawable/ic_airplane_black_24dp"
+            android:title="@string/about" />
+
+    </group>
+</menu>

@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--背景图 需要高斯模糊 -->
+    <ImageView
+        android:id="@+id/imageView_picdetail_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <!--图片-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_picdetail_pic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/eight_dip"
+                android:layout_marginStart="@dimen/sixteen_dip"
+                android:layout_marginEnd="@dimen/sixteen_dip"
+                android:layout_marginTop="81dp"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:stateListAnimator="@animator/touch_raise"
+                app:cardCornerRadius="@dimen/four_dp">
+                <!--水波纹效果 按下抬起效果 圆角效果-->
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#f4f4f4">
+
+                    <!--这里放图-->
+                    <com.rey.material.widget.ImageView
+                        android:id="@+id/card_picdetail_pic_pic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+
+                    <!--显示加载进度-->
+                    <com.rey.material.widget.ProgressView
+                        android:id="@+id/card_picdetail_pic_progress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        app:pv_autostart="true"
+                        app:pv_circular="true"
+                        app:pv_progressStyle="@style/Material.Drawable.CircularProgress"
+                        app:pv_progressMode="indeterminate"/>
+
+                    <!--显示张数-->
+                    <com.rey.material.widget.TextView
+                        android:id="@+id/card_picdetail_pic_pagecnt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:background="#40000000"
+                        android:textColor="#ffffff"
+                        android:textSize="16sp"
+                        android:visibility="invisible"/>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+
+
+            <!--作者信息-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_picdetail_author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/card_picdetail_pic"
+                android:layout_marginBottom="@dimen/eight_dip"
+                android:layout_marginEnd="@dimen/sixteen_dip"
+                android:layout_marginStart="@dimen/sixteen_dip"
+                android:layout_marginTop="@dimen/eight_dip"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:stateListAnimator="@animator/touch_raise"
+                app:cardCornerRadius="@dimen/four_dp">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#f4f4f4">
+                    <!--头像 昵称 点关注不迷路-->
+
+                    <!--头像-->
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/card_picdetail_author_profile"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:scaleType="centerCrop"
+                        android:layout_marginBottom="@dimen/sixteen_dip"
+                        android:layout_marginStart="@dimen/sixteen_dip"
+                        android:layout_marginTop="@dimen/sixteen_dip"  />
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toEndOf="@+id/card_picdetail_author_profile"
+                        android:layout_toStartOf="@+id/card_picdetail_author_isfollow"
+                        android:layout_marginBottom="@dimen/sixteen_dip"
+                        android:layout_marginTop="@dimen/sixteen_dip">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <!--昵称-->
+                            <com.rey.material.widget.TextView
+                                android:id="@+id/card_picdetail_author_nickname"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/eight_dip"
+                                android:layout_marginStart="@dimen/eight_dip"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="15sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+
+                                    <com.rey.material.widget.ImageView
+                                        android:id="@+id/card_picdetail_author_view"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_eye_black_24dp"
+                                        android:layout_marginStart="@dimen/eight_dip" />
+                                    <com.rey.material.widget.TextView
+                                        android:id="@+id/card_picdetail_author_total_view"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/three_dip"
+                                        android:layout_marginStart="@dimen/eight_dip" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+                                    <com.rey.material.widget.ImageView
+                                        android:id="@+id/card_picdetail_author_book"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_favorite_white_24dp" />
+                                    <com.rey.material.widget.TextView
+                                        android:id="@+id/card_picdetail_author_total_bookmarks"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/three_dip"
+                                        android:layout_marginStart="@dimen/eight_dip" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+
+
+
+
+
+
+                        </LinearLayout>
+
+
+
+
+
+                    </RelativeLayout>
+
+
+
+                    <!--关注？-->
+                    <com.rey.material.widget.TextView
+                        android:id="@+id/card_picdetail_author_isfollow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="@dimen/sixteen_dip"
+                        android:layout_marginTop="27dp"
+                        android:background="@drawable/btn_bg"
+                        android:paddingBottom="2dp"
+                        android:paddingEnd="@dimen/eight_dip"
+                        android:paddingStart="@dimen/eight_dip"
+                        android:paddingTop="2dp"
+                        android:textColor="#fff"
+                        android:textSize="14sp"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:stateListAnimator="@animator/touch_raise"
+                        app:cardCornerRadius="@dimen/four_dp"/>
+
+
+
+                    <!--图片介绍-->
+                    <com.rey.material.widget.TextView
+                        android:id="@+id/card_picdetail_author_describe"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/card_picdetail_author_profile"
+                        android:layout_marginBottom="@dimen/sixteen_dip"
+                        android:layout_marginEnd="@dimen/sixteen_dip"
+                        android:layout_marginStart="@dimen/sixteen_dip"
+                        android:autoLink="all"
+                        android:textSize="14sp"  />
+
+                </RelativeLayout>
+
+
+
+
+            </android.support.v7.widget.CardView>
+
+
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_picdetail_download"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/card_picdetail_author"
+                android:layout_marginBottom="81dp"
+                android:layout_marginStart="@dimen/sixteen_dip"
+                android:layout_marginEnd="@dimen/sixteen_dip"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:stateListAnimator="@animator/touch_raise"
+                app:cardCornerRadius="@dimen/four_dp">
+
+                <com.rey.material.widget.Button
+                    android:id="@+id/card_picdetail_download_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/download"
+                    android:textColor="#ffffff"
+                    android:background="@color/colorPrimary"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:stateListAnimator="@animator/touch_raise"
+                    app:cardCornerRadius="@dimen/four_dp"
+
+                    />
+
+            </android.support.v7.widget.CardView>
+
+
+        </RelativeLayout>
+
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+</android.support.design.widget.CoordinatorLayout>

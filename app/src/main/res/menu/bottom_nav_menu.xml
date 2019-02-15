@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--已暂时弃用-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tab_recommend"
+        android:title="@string/recommend"
+        android:actionLayout="@drawable/recommend"
+        />
+
+    <item
+        android:id="@+id/tab_rank"
+        android:title="@string/discovery"
+        android:icon="@drawable/ic_find_black_24dp"
+        />
+
+    <item
+        android:id="@+id/tab_mine"
+        android:title="@string/mine"
+        android:icon="@drawable/ic_favorite_white_24dp"
+         />
+</menu>

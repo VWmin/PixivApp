@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/tab_recommend"
+        title="推荐"
+        icon="@drawable/ic_cafe_black_24dp"
+        activeColor="#ffffff"
+        inActiveColor="#ffffff"
+        barColorWhenSelected="#86c166" />
+
+    <tab
+        id="@+id/tab_rank"
+        title="发现"
+        icon="@drawable/ic_find_black_24dp"
+        activeColor="#ffffff"
+        inActiveColor="#ffffff"
+        barColorWhenSelected="#58b2dc" />
+
+    <tab
+        id="@+id/tab_mine"
+        title="我的"
+        icon="@drawable/ic_favorite_white_24dp"
+        activeColor="#ffffff"
+        inActiveColor="#ffffff"
+        barColorWhenSelected="#f19483" />
+</tabs>

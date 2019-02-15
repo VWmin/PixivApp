@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_height"
+    android:background="@drawable/nav_header"
+    android:orientation="vertical">
+
+    <ImageView
+
+        android:id="@+id/nav_header_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/user_email"
+        android:layout_marginBottom="-15dp"
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_img"
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+        android:scaleType="centerCrop"
+        android:layout_marginStart="@dimen/sixteen_dip"
+        android:layout_above="@+id/user_name"
+        app:srcCompat="@mipmap/logo" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="@dimen/sixteen_dip"
+        android:layout_above="@+id/user_email"
+        android:text="@string/not_login"
+         />
+
+    <TextView
+        android:id="@+id/user_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/sixteen_dip"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/sixteen_dip"
+        android:text="@string/not_auth_email" />
+
+</RelativeLayout>

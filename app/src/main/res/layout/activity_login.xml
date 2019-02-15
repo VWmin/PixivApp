@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!--滚动背景图-->
+    <com.vwmin.min.sharedpreferencestest.utils.AutoScrollRecyclerView
+        android:id="@+id/recycle_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.vwmin.min.sharedpreferencestest.utils.AutoScrollRecyclerView>
+
+    <!--提供一个背景阴影色调-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.45"
+        android:background="@android:color/black" />
+
+    <!--顶部的返回按钮 和 标题-->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_exit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
+        app:title="Pixiv"
+        app:titleTextColor="@android:color/white">
+
+    </android.support.v7.widget.Toolbar>
+
+    <!--用来界定logo显示范围的划分线条-->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="79dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--输入card-->
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="45dp"
+        android:background="@android:color/white"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:stateListAnimator="@animator/touch_raise"
+        app:cardCornerRadius="@dimen/card_recycler_elevation"
+        app:cardElevation="@dimen/card_recycler_elevation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.50">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.rey.material.widget.EditText
+                android:id="@+id/edit_account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="@dimen/eight_dip"
+                android:layout_marginTop="12dp"
+                android:hint="@string/edit_account"
+                android:inputType="none"
+                android:singleLine="true"
+                app:et_labelEnable="true"
+                app:et_labelTextColor="@color/colorPrimary" />
+
+            <com.rey.material.widget.EditText
+                android:id="@+id/edit_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_account"
+                android:layout_marginStart="@dimen/eight_dip"
+                android:layout_marginTop="8dp"
+                android:hint="@string/edit_password"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                app:et_labelEnable="true"
+                app:et_labelTextColor="@color/colorPrimary"
+                app:et_dividerColor="#2d2a2a"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_password"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/chk_remember"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:text="@string/remember_password"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+    <!--登陆card-->
+    <android.support.v7.widget.CardView
+        android:id="@+id/button_login"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/card_login"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="@dimen/sixteen_dip"
+        android:layout_marginEnd="45dp"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:stateListAnimator="@animator/touch_raise"
+        app:cardCornerRadius="@dimen/card_recycler_elevation"
+        app:cardElevation="@dimen/card_recycler_elevation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/card_login">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/button_login"
+            android:textColor="#2196f3"
+            android:textSize="16sp" />
+    </android.support.v7.widget.CardView>
+
+    <!--显示登陆进度-->
+    <ProgressBar
+        android:id="@+id/progress_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_login" />
+
+    <!--logo-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="105dp"
+        android:src="@mipmap/logo_trans"
+        app:layout_constraintBottom_toTopOf="@+id/card_login"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        android:contentDescription="@string/logo" />
+
+</android.support.constraint.ConstraintLayout>
