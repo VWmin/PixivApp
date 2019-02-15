@@ -1,9 +1,18 @@
-package com.vwmin.min.sharedpreferencestest.fragment.mine;
+package com.vwmin.min.sharedpreferencestest.fragment.frag;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -12,10 +21,16 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.vwmin.min.sharedpreferencestest.R;
 import com.vwmin.min.sharedpreferencestest.adapters.IllustAdapter;
 import com.vwmin.min.sharedpreferencestest.data.ViewHistory;
+import com.vwmin.min.sharedpreferencestest.data.ViewHistoryOperator;
+import com.vwmin.min.sharedpreferencestest.event.IllustChangeEvent;
 import com.vwmin.min.sharedpreferencestest.fragment.BaseFragment;
 import com.vwmin.min.sharedpreferencestest.response.Illust;
 import com.vwmin.min.sharedpreferencestest.utils.Density;
 import com.vwmin.min.sharedpreferencestest.utils.GridItemDecoration;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,12 +41,49 @@ import static org.litepal.Operator.findAll;
 
 
 public class FragShowHistory extends BaseFragment {
+
     private RefreshLayout refreshLayout;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private List<Illust> illustList = new ArrayList<>();
     private ImageView imageView;
+    private IllustAdapter illustAdapter;
+    private RefreshViewHistoryReceiver receiver = null;
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void doIllustChange(IllustChangeEvent illustChangeEvent){
+        Log.d("ViewHistoryOperator", "received");
+
+        Illust newIllust = illustChangeEvent.getNewIllust();
+        ViewHistoryOperator.refreshFollowStatus(newIllust.getIllust_id(), newIllust.isUser_isFollowed());
+        ViewHistoryOperator.refreshStarStatus(newIllust.getIllust_id(), newIllust.isBookmarked());
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(receiver == null) {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction("com.vwmin.min.sharedpreferencestest.REFRESH_VIEW_HISTORY");
+            receiver = new RefreshViewHistoryReceiver();
+            Objects.requireNonNull(getContext()).registerReceiver(receiver, intentFilter);
+            Log.d("broadCast", "注册了更新历史纪录的广播");
+        }
+    }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
@@ -68,7 +120,7 @@ public class FragShowHistory extends BaseFragment {
         onRefreshListener();
     }
 
-    // TODO:历史记录界面进入需要一次滑动才开始显示；删除历史记录后需要手动刷新
+
     private void onRefreshListener(){
         progressBar.setVisibility(View.VISIBLE);
         List<ViewHistory> viewHistoryList = findAll(ViewHistory.class);
@@ -80,12 +132,12 @@ public class FragShowHistory extends BaseFragment {
             imageView.setVisibility(View.VISIBLE);
         }else {
             recyclerView.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.GONE);
             if(illustList != null) illustList.clear();
             for(ViewHistory viewHistory:viewHistoryList)
                 illustList.add(Illust.parserViewHistory(viewHistory));
-            IllustAdapter illustAdapter = new IllustAdapter(illustList, getContext());
+            illustAdapter = new IllustAdapter(illustList, getContext());
             recyclerView.setAdapter(illustAdapter);
-            imageView.setVisibility(View.GONE);
         }
         refreshLayout.finishRefresh(true);
         progressBar.setVisibility(View.INVISIBLE);
@@ -96,5 +148,13 @@ public class FragShowHistory extends BaseFragment {
         refreshLayout.finishLoadMore(true);
     }
 
+    class RefreshViewHistoryReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("broadCast", "接收到了更新历史记录的广播");
+            onRefreshListener();
+        }
+    }
 
 }

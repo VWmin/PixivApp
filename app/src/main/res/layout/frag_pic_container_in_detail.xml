@@ -46,20 +46,19 @@
                     <com.rey.material.widget.ImageView
                         android:id="@+id/card_picdetail_pic_pic"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        />
+                        android:layout_height="wrap_content" />
+
 
                     <!--显示加载进度-->
-                    <com.rey.material.widget.ProgressView
+                    <ProgressBar
                         android:id="@+id/card_picdetail_pic_progress"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginBottom="40dp"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center"
-                        app:pv_autostart="true"
-                        app:pv_circular="true"
-                        app:pv_progressStyle="@style/Material.Drawable.CircularProgress"
-                        app:pv_progressMode="indeterminate"/>
+                        />
 
                     <!--显示张数-->
                     <com.rey.material.widget.TextView
@@ -171,7 +170,7 @@
                                         android:id="@+id/card_picdetail_author_book"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:src="@drawable/ic_favorite_white_24dp" />
+                                        android:src="@drawable/ic_favorite_blue_24dp" />
                                     <com.rey.material.widget.TextView
                                         android:id="@+id/card_picdetail_author_total_bookmarks"
                                         android:layout_width="wrap_content"

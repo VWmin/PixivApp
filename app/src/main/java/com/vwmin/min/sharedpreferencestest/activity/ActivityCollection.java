@@ -1,6 +1,7 @@
-package com.vwmin.min.sharedpreferencestest;
+package com.vwmin.min.sharedpreferencestest.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -15,7 +16,7 @@ import java.util.List;
 // 管理活动的类
 public class ActivityCollection {
 
-    public static List<Activity> activities = new ArrayList<>();
+    private static List<Activity> activities = new ArrayList<>();
 
     static void addActivity(Activity activity){
         activities.add(activity);
@@ -42,5 +43,7 @@ public class ActivityCollection {
         Intent intent = new Intent("com.vwmin.min.sharedpreferencestest.FORCE_OFFLINE");
         activities.get(0).sendBroadcast(intent);
     }
+
+
 }
 

@@ -2,6 +2,7 @@ package com.vwmin.min.sharedpreferencestest.utils;
 
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.Headers;
+import com.vwmin.min.sharedpreferencestest.response.Illust;
 import com.vwmin.min.sharedpreferencestest.response.IllustBean;
 
 
@@ -25,8 +26,8 @@ public class GlideUriUtil {
 
 
 
-    public static GlideUrl getImgByIllustBean(IllustBean illustBean){
-        return new GlideUrl(illustBean.getImage_urls().getMedium(), HEADERS);
+    public static GlideUrl getImgByIllust(Illust illust){
+        return new GlideUrl(illust.getMedium_url(), HEADERS);
     }
 
     public static GlideUrl getImgByUrl(String imageUrl){

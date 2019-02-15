@@ -1,33 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="#ffffff">
+
+
+    <ImageView
+        android:id="@+id/image_in_frag_recycle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        android:src="@mipmap/no_result"
+        android:visibility="gone" />
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/refreshLayout_mine_container"
+        android:id="@+id/refreshLayout_in_frag_recycle"
         android:layout_height="0dp"
         android:layout_width="match_parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" >
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycle_mine_container"
+            android:id="@+id/recycle_in_frag_recycle"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 
     <ProgressBar
-        android:id="@+id/progress_mine_container"
+        android:id="@+id/progress_in_frag_recycle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/refreshLayout_mine_container"
-        app:layout_constraintEnd_toEndOf="@+id/refreshLayout_mine_container"
-        app:layout_constraintStart_toStartOf="@+id/refreshLayout_mine_container"
-        app:layout_constraintTop_toTopOf="@+id/refreshLayout_mine_container" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/refreshLayout_in_frag_recycle"
+        app:layout_constraintEnd_toEndOf="@+id/refreshLayout_in_frag_recycle"
+        app:layout_constraintStart_toStartOf="@+id/refreshLayout_in_frag_recycle"
+        app:layout_constraintTop_toTopOf="@+id/refreshLayout_in_frag_recycle" />
 
 
 </android.support.constraint.ConstraintLayout>

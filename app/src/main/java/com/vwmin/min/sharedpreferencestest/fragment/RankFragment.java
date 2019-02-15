@@ -8,29 +8,37 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.vwmin.min.sharedpreferencestest.R;
-import com.vwmin.min.sharedpreferencestest.fragment.rank.FragRank_daily;
-import com.vwmin.min.sharedpreferencestest.fragment.rank.FragRank_monthly;
-import com.vwmin.min.sharedpreferencestest.fragment.rank.FragRank_weekly;
+import com.vwmin.min.sharedpreferencestest.fragment.frag.FragRank;
 
-public class RankFragment  extends BaseFragment {
+public class RankFragment extends BaseFragment {
     private Fragment[] fragments;
     private ViewPager viewPager;
     private TabLayout tab;
-    private static final String TITLES[] = {"每日", "每周", "每月"};
+    private static final String TITLES[] = {"每日", "每周", "每月", "男性向", "女性向", "原创", "新人", "冲冲冲"};
 
 
 
     @Override
     public int setLayoutId() {
-        return R.layout.fragment_rank;
+        return R.layout.fragment_viewpager;
     }
 
     @Override
     public void initView(View view) {
-        fragments = new Fragment[]{new FragRank_daily(), new FragRank_weekly(), new FragRank_monthly()};
-        tab = view.findViewById(R.id.tabPage_rank);
+        tab = view.findViewById(R.id.tabPage_mine);
+        viewPager = view.findViewById(R.id.viewPager_mine);
 
-        viewPager = view.findViewById(R.id.viewPager_rank);
+        fragments = new Fragment[]{
+                FragRank.getInstance("day"),
+                FragRank.getInstance("week"),
+                FragRank.getInstance("month"),
+                FragRank.getInstance("day_male"),
+                FragRank.getInstance("day_female"),
+                FragRank.getInstance("week_original"),
+                FragRank.getInstance("week_rookie"),
+                FragRank.getInstance("day_r18"),
+        };
+
         viewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int i) {
@@ -57,5 +65,10 @@ public class RankFragment  extends BaseFragment {
     @Override
     public void initData() {
 
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+//        ((MainActivity) Objects.requireNonNull(getActivity())).setTableLayout(viewPager);
     }
 }

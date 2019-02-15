@@ -1,4 +1,4 @@
-package com.vwmin.min.sharedpreferencestest;
+package com.vwmin.min.sharedpreferencestest.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.scwang.smartrefresh.header.DeliveryHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.vwmin.min.sharedpreferencestest.R;
 import com.vwmin.min.sharedpreferencestest.adapters.IllustAdapter;
 import com.vwmin.min.sharedpreferencestest.network.SearchRetrofit;
 import com.vwmin.min.sharedpreferencestest.response.Illust;
@@ -118,7 +119,7 @@ public class ShowSearchActivity extends BaseActivity {
                 refreshLayout.finishRefresh(true);
             }
         };
-        SearchRetrofit.getInstance().getSearchAsTag(observer, query+"5000users入り", "desc", "1");
+        SearchRetrofit.getInstance().getSearchAsTag(observer, query+"1000users入り", "desc", "1");
     }
 
     private void onLoadMoreListener(){
@@ -149,7 +150,7 @@ public class ShowSearchActivity extends BaseActivity {
                 refreshLayout.finishLoadMore(true);
             }
         };
-        SearchRetrofit.getInstance().getSearchAsTag(observer, query+"5000users入り", "desc", currentPage+"");
+        SearchRetrofit.getInstance().getSearchAsTag(observer, query+"1000users入り", "desc", currentPage+"");
 
     }
 

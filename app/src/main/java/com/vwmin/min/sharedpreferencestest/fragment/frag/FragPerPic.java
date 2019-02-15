@@ -1,6 +1,7 @@
-package com.vwmin.min.sharedpreferencestest.fragment;
+package com.vwmin.min.sharedpreferencestest.fragment.frag;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,18 +16,28 @@ import com.bumptech.glide.request.target.Target;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.ImageView;
 import com.rey.material.widget.TextView;
-import com.vwmin.min.sharedpreferencestest.activity.ActivityCollection;
 import com.vwmin.min.sharedpreferencestest.activity.PicDetailActivity;
 import com.vwmin.min.sharedpreferencestest.R;
+import com.vwmin.min.sharedpreferencestest.activity.PicMasterActivity;
 import com.vwmin.min.sharedpreferencestest.data.AppSetting;
+import com.vwmin.min.sharedpreferencestest.data.UserInfo;
+import com.vwmin.min.sharedpreferencestest.event.IllustChangeEvent;
+import com.vwmin.min.sharedpreferencestest.fragment.BaseFragment;
+import com.vwmin.min.sharedpreferencestest.network.AppRetrofit;
 import com.vwmin.min.sharedpreferencestest.network.DownloadTask;
 import com.vwmin.min.sharedpreferencestest.response.Illust;
+import com.vwmin.min.sharedpreferencestest.response.NullResponse;
 import com.vwmin.min.sharedpreferencestest.utils.GlideUriUtil;
 
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 import static org.litepal.Operator.find;
@@ -42,7 +53,7 @@ public class FragPerPic extends BaseFragment implements View.OnClickListener {
     private ProgressBar progress;
     private CircleImageView authorProfile;
     private TextView authorNickname;
-    private TextView fallow;
+    private TextView follow;
     private TextView imgDescribe;
     private Context context;
     private Button download;
@@ -63,7 +74,7 @@ public class FragPerPic extends BaseFragment implements View.OnClickListener {
         progress = view.findViewById(R.id.card_picdetail_pic_progress);
         authorProfile = view.findViewById(R.id.card_picdetail_author_profile);
         authorNickname = view.findViewById(R.id.card_picdetail_author_nickname);
-        fallow = view.findViewById(R.id.card_picdetail_author_isfollow);
+        follow = view.findViewById(R.id.card_picdetail_author_isfollow);
         imgDescribe = view.findViewById(R.id.card_picdetail_author_describe);
         download = view.findViewById(R.id.card_picdetail_download_button);
         totalViewed = view.findViewById(R.id.card_picdetail_author_total_view);
@@ -82,7 +93,7 @@ public class FragPerPic extends BaseFragment implements View.OnClickListener {
 
         // 设置监听
         img.setOnClickListener(this);
-        fallow.setOnClickListener(this);
+        follow.setOnClickListener(this);
         download.setOnClickListener(this);
     }
 
@@ -130,7 +141,11 @@ public class FragPerPic extends BaseFragment implements View.OnClickListener {
         imgDescribe.setText(illust.getCaption()==null||illust.getCaption().equals("") ?"作者没有添加描述~":illust.getCaption());
 
         // 关注
-        fallow.setText("+关注");
+        if(!illust.isUser_isFollowed()) {
+            follow.setText("+关注");
+        }else{
+            follow.setText("✓已关注");
+        }
 
         // 设置张数
         pageCnt.setText(String.format("%sP", String.valueOf(illust.getPage_count())));
@@ -146,15 +161,18 @@ public class FragPerPic extends BaseFragment implements View.OnClickListener {
     }
 
 
-
-
     // TODO:待完成：点击图片事件，关注事件
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.card_picdetail_pic_pic:
+                Intent intent = new Intent(context, PicMasterActivity.class);
+                intent.putExtra("urls", (ArrayList<String>)illust.getMeta_pages());
+                startActivity(intent);
                 break;
             case R.id.card_picdetail_author_isfollow:
+                if(!illust.isUser_isFollowed()) postFollow(true);
+                else postFollow(false);
                 break;
             case R.id.card_picdetail_download_button: // 下载
                 new DownloadTask(context, AppSetting.getSavePath(), illust.getTitle()+"_"+illust.getIllust_id()+".jpg").execute(illust.getMeta_pages().get(0));
@@ -179,6 +197,69 @@ public class FragPerPic extends BaseFragment implements View.OnClickListener {
 //        return illust.getMeta_pages().get(0);
 //
         return illust.getMedium_url();
+    }
+
+    private void postFollow(boolean choose){
+        Observer<NullResponse> observer;
+        if (choose){
+            observer = new Observer<NullResponse>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(NullResponse response) {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Toast.makeText(context, "操作失败，请检查网络", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onComplete() {
+                    follow.setText("✓已关注");
+                    Toast.makeText(context, "已关注", Toast.LENGTH_SHORT).show();
+                    illust.setUser_isFollowed(true);
+                    EventBus.getDefault().post(new IllustChangeEvent(illust));
+                }
+            };
+            AppRetrofit.getInstance().followUser(observer,
+                    UserInfo.getInstance(context).getAuthorization(),
+                    illust.getUser_id()+"",
+                    "public");
+        }else{
+            observer = new Observer<NullResponse>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(NullResponse response) {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Toast.makeText(context, "操作失败，请检查网络", Toast.LENGTH_SHORT).show();
+
+                }
+
+                @Override
+                public void onComplete() {
+                    follow.setText("+关注");
+                    Toast.makeText(context, "已取消关注", Toast.LENGTH_SHORT).show();
+                    illust.setUser_isFollowed(false);
+                    EventBus.getDefault().post(new IllustChangeEvent(illust));
+                }
+            };
+            AppRetrofit.getInstance().unFollowUser(observer,
+                    UserInfo.getInstance(context).getAuthorization(),
+                    illust.getUser_id()+"");
+        }
     }
 
 }

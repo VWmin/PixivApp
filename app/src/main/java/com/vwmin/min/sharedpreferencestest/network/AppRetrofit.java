@@ -4,17 +4,19 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.vwmin.min.sharedpreferencestest.ActivityCollection;
-import com.vwmin.min.sharedpreferencestest.response.IllustBean;
+import com.vwmin.min.sharedpreferencestest.activity.ActivityCollection;
 import com.vwmin.min.sharedpreferencestest.response.IllustResponse;
 import com.vwmin.min.sharedpreferencestest.response.IllustsResponse;
 import com.vwmin.min.sharedpreferencestest.response.LoginResponse;
+import com.vwmin.min.sharedpreferencestest.response.NullResponse;
 import com.vwmin.min.sharedpreferencestest.utils.AfterComplete;
 import com.vwmin.min.sharedpreferencestest.data.UserInfo;
 
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -24,6 +26,13 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public class AppRetrofit {
 
@@ -66,19 +75,11 @@ public class AppRetrofit {
                 .addInterceptor(new HttpLoggingInterceptor()
                         .setLevel(HttpLoggingInterceptor.Level.BODY)) // 请求拦截器 这里只用来打印request和response
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                // 添加请求头
-//                      .addInterceptor(chain -> {
-//                             Request localRequest = chain.request().newBuilder()
-//                            .addHeader(HEADER_NAME, HEADER_VALUE)
-//                            .addHeader(HEADER_NAME2, HEADER_VALUE2)
-//                            .build();
-//                         return chain.proceed(localRequest);
-//                      })
                 .build();
     }
 
 
-    /* TODO:以下为网络接口 */
+    /* 以下为网络接口 */
 
     // 获取登陆界面的背景图
     public void getLoginBg(Observer<IllustsResponse> observer){
@@ -137,10 +138,54 @@ public class AppRetrofit {
                 .subscribe(observer);
     }
 
+    public void starIllust(Observer<NullResponse> observer,
+                           String authorization,
+                           String id,
+                           String restrict,
+                           List<String> tags){
+        appApi.starIllust(authorization, id, restrict, tags)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void unStarIllust(Observer<NullResponse> observer,
+                             String authorization,
+                             String id){
+        appApi.unStarIllust(authorization, id)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void followUser(Observer<NullResponse> observer,
+                           String authorization,
+                           String userId,
+                           String restrict){
+        appApi.followUser(authorization, userId, restrict)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void unFollowUser(Observer<NullResponse> observer,
+                           String authorization,
+                           String userId){
+        appApi.unFollowUser(authorization, userId)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+
 
     // 如果token过期则重拿token, 否则执行传入函数动作
     public void chkToken(Context context, AfterComplete afterComplete){
-        if(System.currentTimeMillis() - UserInfo.getInstance(context).getPref().getLong("last_token_time", 0) >= ONE_HOUR){
+        if(System.currentTimeMillis() - UserInfo.getInstance(context).getLastTokenTime() >= ONE_HOUR){
 
             Observer<LoginResponse> observer = new Observer<LoginResponse>() {
                 @Override
@@ -152,16 +197,17 @@ public class AppRetrofit {
                 public void onNext(LoginResponse loginResponse) {
                     // 重新保存
                     if (loginResponse != null && loginResponse.getResponse() != null) {
-                        boolean isRemember = UserInfo.getInstance(context).getPref().getBoolean("is_remember", false);
+                        boolean isRemember = UserInfo.getInstance(context).isRemember();
                         String pwd = "";
                         if(isRemember){
-                            pwd = UserInfo.getInstance(context).getPref().getString("password", "");
+                            pwd = UserInfo.getInstance(context).getPassword();
                         }
                         UserInfo.getInstance(context).saveUserInfo(loginResponse, pwd, isRemember);
                     }
                     else {
                         Toast.makeText(context, "网络似乎出了点问题，请重新登陆", Toast.LENGTH_LONG).show();
-                        ActivityCollection.forceOffline();
+//                        ActivityCollection.forceOffline();
+                        ActivityCollection.finishAll();
                     }
                 }
 
@@ -175,7 +221,7 @@ public class AppRetrofit {
 
                 @Override
                 public void onComplete() {
-                    afterComplete.GO();
+                    afterComplete.onSuccess();
                 }
             };
             LoginRetrofit.getInstance().refreshToken(
@@ -183,14 +229,115 @@ public class AppRetrofit {
                             LOGIN_PARAM_1,
                             LOGIN_PARAM_2,
                             LOGIN_PARAM_6,
-                            UserInfo.getInstance(context).getPref().getString("refresh_token", ""),
-                            UserInfo.getInstance(context).getPref().getString("device_token", ""),
+                            UserInfo.getInstance(context).getRefreshToken(),
+                            UserInfo.getInstance(context).getDeviceToken(),
                             LOGIN_PARAM_4);
 
         }
         else{
-            afterComplete.GO();
+            afterComplete.onSuccess();
         }
+
+    }
+
+    private interface AppApi {
+
+        /**
+         * 登陆界面滚动背景图
+         *
+         * @return
+         */
+        @GET("/v1/walkthrough/illusts")
+        Observable<IllustsResponse> getLoginBg();
+
+
+        /**
+         * 推荐榜单
+         *
+         * @param authorization
+         * @param filter
+         * @param include_ranking_illusts
+         * @return
+         */
+        @GET("/v1/illust/recommended")
+        Observable<IllustsResponse> getRecommendIllust(@Header("Authorization") String authorization,
+                                                       @Query("filter") String filter,
+                                                       @Query("include_ranking_illusts") boolean include_ranking_illusts);
+        /**
+         * 下拉界面时抓取下一批推荐
+         * @param authorization
+         * @param nextUrl
+         * @return
+         *
+         * */
+
+        @GET
+        Observable<IllustsResponse> getNext(@Header("Authorization") String authorization,
+                                            @Url String nextUrl);
+
+
+        /**
+         * 排行榜
+         *
+         * @param authorization
+         * @param filter
+         * @param mode 可选有"day", "week", "month", "day_male", "day_female", "week_original", "week_rookie"
+         * @return
+         */
+        @GET("/v1/illust/ranking")
+        Observable<IllustsResponse> getRank(@Header("Authorization") String authorization,
+                                            @Query("filter") String filter,
+                                            @Query("mode") String mode);
+
+        /**
+         * 获取一张单图
+         * */
+        @GET("/v1/illust/detail")
+        Observable<IllustResponse> getSingleIllust(@Header("Authorization") String authorization,
+                                                   @Query("filter") String filter,
+                                                   @Query("illust_id") int illust_id);
+
+        /**
+         * 收藏
+         *
+         * */
+        @FormUrlEncoded
+        @POST("/v2/illust/bookmark/add")
+        Observable<NullResponse> starIllust(@Header("Authorization") String authorization,
+                                      @Field("illust_id") String id,
+                                      @Field("restrict") String restrict,
+                                      @Field("tags[]") List<String> tags);
+
+        /**
+         * 取消收藏
+         *
+         * */
+        @FormUrlEncoded
+        @POST("/v1/illust/bookmark/delete")
+        Observable<NullResponse> unStarIllust(@Header("Authorization") String authorization,
+                                        @Field("illust_id") String id);
+
+
+        /**
+         * 关注
+         *
+         */
+        @FormUrlEncoded
+        @POST("/v1/user/follow/add")
+        Observable<NullResponse> followUser(@Header("Authorization") String authorization,
+                                            @Field("user_id") String userId,
+                                            @Field("restrict") String restrict);
+
+
+        /**
+         * 取消关注
+         *
+         */
+        @FormUrlEncoded
+        @POST("/v1/user/follow/delete")
+        Observable<NullResponse> unFollowUser(@Header("Authorization") String authorization,
+                                              @Field("user_id") String userId);
+
 
     }
 

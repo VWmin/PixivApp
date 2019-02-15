@@ -1,23 +1,12 @@
 package com.vwmin.min.sharedpreferencestest.network;
 
-import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.vwmin.min.sharedpreferencestest.ActivityCollection;
-import com.vwmin.min.sharedpreferencestest.data.UserInfo;
-import com.vwmin.min.sharedpreferencestest.response.IllustResponse;
-import com.vwmin.min.sharedpreferencestest.response.IllustsResponse;
-import com.vwmin.min.sharedpreferencestest.response.LoginResponse;
 import com.vwmin.min.sharedpreferencestest.response.SearchResponse;
-import com.vwmin.min.sharedpreferencestest.utils.AfterComplete;
 
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -27,32 +16,32 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-public class tmpRetrofit {
+public class SearchRetrofit {
     private static final String APP_BASE_URL = "https://api.imjad.cn";
     private static final int DEFAULT_TIMEOUT = 5;
 
 
 
-    private AppApi appApi;
+    private SearchApi searchApi;
 
-    private tmpRetrofit(){
+    private SearchRetrofit(){
         Retrofit retrofit = new Retrofit.Builder()
                 .client(getOkhttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(APP_BASE_URL)
                 .build();
-        appApi = retrofit.create(AppApi.class);
+        searchApi = retrofit.create(SearchApi.class);
     }
 
     // 访问Retro时创建单例
     private static class SingletonHolder{
-        private static final tmpRetrofit INSTANCE = new tmpRetrofit();
+        private static final SearchRetrofit INSTANCE = new SearchRetrofit();
     }
 
     // 获取单例
-    public static tmpRetrofit getInstance(){
-        return tmpRetrofit.SingletonHolder.INSTANCE;
+    public static SearchRetrofit getInstance(){
+        return SearchRetrofit.SingletonHolder.INSTANCE;
     }
 
 
@@ -68,7 +57,7 @@ public class tmpRetrofit {
     // 大概是搜索把
     public void getSearchAsTag(Observer<SearchResponse> observer,
                           String word, String order, String page){
-        appApi.getSearch("search", word, order, page)
+        searchApi.getSearch("search", word, order, page)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -76,7 +65,7 @@ public class tmpRetrofit {
     }
 
 
-    private interface AppApi{
+    private interface SearchApi {
         @GET("/pixiv/v1")
         Observable<SearchResponse> getSearch(@Query("type") String type,
                 @Query("word") String word,

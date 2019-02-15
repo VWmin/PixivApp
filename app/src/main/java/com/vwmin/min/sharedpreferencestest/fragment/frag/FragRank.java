@@ -1,9 +1,13 @@
-package com.vwmin.min.sharedpreferencestest.fragment.rank;
+package com.vwmin.min.sharedpreferencestest.fragment.frag;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -11,6 +15,7 @@ import com.scwang.smartrefresh.header.DeliveryHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.vwmin.min.sharedpreferencestest.R;
 import com.vwmin.min.sharedpreferencestest.adapters.IllustAdapter;
+import com.vwmin.min.sharedpreferencestest.event.IllustChangeEvent;
 import com.vwmin.min.sharedpreferencestest.fragment.BaseFragment;
 import com.vwmin.min.sharedpreferencestest.network.AppRetrofit;
 import com.vwmin.min.sharedpreferencestest.response.Illust;
@@ -19,6 +24,10 @@ import com.vwmin.min.sharedpreferencestest.utils.AfterComplete;
 import com.vwmin.min.sharedpreferencestest.utils.Density;
 import com.vwmin.min.sharedpreferencestest.utils.GridItemDecoration;
 import com.vwmin.min.sharedpreferencestest.data.UserInfo;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 import java.util.Objects;
@@ -44,6 +53,31 @@ public class FragRank extends BaseFragment {
         return frag;
     }
 
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void doIllustChange(IllustChangeEvent illustChangeEvent){
+        Illust newIllust = illustChangeEvent.getNewIllust();
+        for(int i=0; i<illustList.size(); i++)
+            if (illustList.get(i).getIllust_id() == illustChangeEvent.getNewIllust().getIllust_id()) {
+                illustList.get(i).setUser_isFollowed(newIllust.isUser_isFollowed());
+                illustList.get(i).setBookmarked(newIllust.isBookmarked());
+
+                illustAdapter.setStar(newIllust.getIllust_id(), newIllust.isBookmarked());
+            }
+    }
 
     @Override
     public int setLayoutId() {

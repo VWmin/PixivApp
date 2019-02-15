@@ -1,4 +1,4 @@
-package com.vwmin.min.sharedpreferencestest;
+package com.vwmin.min.sharedpreferencestest.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,7 +13,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +24,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+import com.vwmin.min.sharedpreferencestest.R;
 import com.vwmin.min.sharedpreferencestest.data.ViewHistory;
 import com.vwmin.min.sharedpreferencestest.fragment.MineFragment;
 import com.vwmin.min.sharedpreferencestest.fragment.RankFragment;
@@ -63,11 +63,12 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setStatusBarColor(this.getResources().getColor(R.color.colorPrimary));
+
 
         setLayout();
         setControl();
         setListener();
-
 
     }
 
@@ -183,9 +184,10 @@ public class MainActivity extends BaseActivity
 
                 break;
             case R.id.menu_item_signOut:
-                ActivityCollection.forceOffline();
+//                ActivityCollection.forceOffline();
+                UserInfo.getInstance(MainActivity.this).deleteUserInfo();
+                sendBroadcast(new Intent("com.vwmin.min.sharedpreferencestest.FORCE_OFFLINE"));
                 break;
-
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -200,7 +202,6 @@ public class MainActivity extends BaseActivity
             /* 这是底部的 */
             case R.id.tab_recommend:
                 switchFragment(0);
-
 //                toolbar.setBackgroundColor(Color.parseColor("#86c166"));
                 break ;
             case R.id.tab_rank:
@@ -224,6 +225,7 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
+    //
     @Override
     public boolean onQueryTextSubmit(String query) {
         Intent intent = new Intent(MainActivity.this, ShowSearchActivity.class);
@@ -245,13 +247,6 @@ public class MainActivity extends BaseActivity
         MineFragment mineFragment = new MineFragment();
 
         fragments = new Fragment[]{recommendFragment, rankFragment, mineFragment};
-
-
-//        getSupportFragmentManager()
-//                .beginTransaction()  // 启动事务处理
-//                .add(R.id.fragment_container_main_interface, recommendFragment)
-//                .show(recommendFragment)
-//                .commit();
 
         current_fragment = 1;
     }
@@ -294,13 +289,6 @@ public class MainActivity extends BaseActivity
             }
         }
     }
-
-
-
-
-//        public void setTableLayout(ViewPager viewPager){
-//        tab.setupWithViewPager(viewPager, true);
-//    }
 
 
 

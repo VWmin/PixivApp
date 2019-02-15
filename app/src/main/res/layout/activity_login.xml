@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
+        app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
         app:title="Pixiv"
         app:titleTextColor="@android:color/white">
 
@@ -38,7 +38,7 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="79dp"
+        android:layout_marginTop="70dp"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!--输入card-->
@@ -73,6 +73,8 @@
                 android:layout_marginStart="@dimen/eight_dip"
                 android:layout_marginTop="12dp"
                 android:hint="@string/edit_account"
+                android:textSize="20sp"
+                app:et_labelTextSize="10dp"
                 android:inputType="none"
                 android:singleLine="true"
                 app:et_labelEnable="true"
@@ -86,6 +88,8 @@
                 android:layout_marginStart="@dimen/eight_dip"
                 android:layout_marginTop="8dp"
                 android:hint="@string/edit_password"
+                android:textSize="20sp"
+                app:et_labelTextSize="10dp"
                 android:inputType="textPassword"
                 android:singleLine="true"
                 app:et_labelEnable="true"
@@ -108,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
                     android:text="@string/remember_password"
-                    android:textSize="18sp" />
+                    android:textSize="13sp" />
 
             </LinearLayout>
 

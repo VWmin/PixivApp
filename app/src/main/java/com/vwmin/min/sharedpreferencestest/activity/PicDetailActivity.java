@@ -1,4 +1,4 @@
-package com.vwmin.min.sharedpreferencestest;
+package com.vwmin.min.sharedpreferencestest.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,13 +7,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 
-import com.rey.material.widget.ImageView;
+import com.vwmin.min.sharedpreferencestest.R;
 import com.vwmin.min.sharedpreferencestest.data.ViewHistory;
-import com.vwmin.min.sharedpreferencestest.fragment.FragPerPic;
+import com.vwmin.min.sharedpreferencestest.data.ViewHistoryOperator;
+import com.vwmin.min.sharedpreferencestest.fragment.frag.FragPerPic;
 import com.vwmin.min.sharedpreferencestest.response.Illust;
-import com.vwmin.min.sharedpreferencestest.response.IllustBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +31,12 @@ public class PicDetailActivity extends BaseActivity {
     private int position;
     private List<FragPerPic> frags = new ArrayList<>();
 
+    @Override
+    public void finish() {
+        Log.d("broadCast", "发送了更新历史记录的广播");
+        sendBroadcast(new Intent("com.vwmin.min.sharedpreferencestest.REFRESH_VIEW_HISTORY"));
+        super.finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +52,7 @@ public class PicDetailActivity extends BaseActivity {
 
     @Override
     void setLayout() {
-        setContentView(R.layout.activity_picdetail);
+        setContentView(R.layout.activity_pic_detail);
     }
 
     @Override
@@ -61,9 +66,9 @@ public class PicDetailActivity extends BaseActivity {
 
 //        Log.d("yyyy", "I choose position "+position);
 
-        for(Illust illust:illustList){
+        for(Illust illust:illustList)
             frags.add(FragPerPic.newInstance(illust));
-        }
+
 
 
 
@@ -87,16 +92,7 @@ public class PicDetailActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int i) {
-                // 更新图片点击时间
-                List<ViewHistory> matches = where("illust_id = ?",
-                        String.valueOf(illustList.get(i).getIllust_id())).find(ViewHistory.class);
-                if(matches.size()==0) {
-                    ViewHistory viewHistory = new ViewHistory(illustList.get(i));
-                    viewHistory.save();
-                }else{
-                    matches.get(0).setTime(System.currentTimeMillis());
-                    matches.get(0).updateAll("illust_id = ?", String.valueOf(illustList.get(i).getIllust_id()));
-                }
+                ViewHistoryOperator.refreshClickTime(illustList.get(i));
             }
 
             @Override

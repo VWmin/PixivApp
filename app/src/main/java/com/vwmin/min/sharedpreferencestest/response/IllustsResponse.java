@@ -2,11 +2,14 @@ package com.vwmin.min.sharedpreferencestest.response;
 
 import java.util.List;
 
+
+
 public class IllustsResponse {
 
 
     private String next_url;
     private List<IllustBean> illusts;
+
 
 
     public String getNext_url() {

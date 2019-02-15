@@ -21,27 +21,6 @@ public class UserInfo {
         return SingletonHolder.INSTANCE;
     }
 
-    public void resetAll(LoginResponse loginResponse, String pwd){
-        SharedPreferences.Editor userPrefEditor = userPref.edit();
-        userPrefEditor.clear();
-        userPrefEditor.apply();
-
-        /* 以下为用户信息 */
-
-
-
-        /* 以下为用户配置 */
-        userPrefEditor.putString("download_path",
-                "/storage/emulated/0/PixivPictures");
-        userPrefEditor.putBoolean("is_load_origin_pic",
-                true);
-
-
-
-
-        userPrefEditor.apply();
-    }
-
     public void saveUserInfo(LoginResponse loginResponse, String pwd, boolean isRemember){
         SharedPreferences.Editor userPrefEditor = userPref.edit();
 
@@ -78,7 +57,35 @@ public class UserInfo {
 
     }
 
-    public SharedPreferences getPref(){return userPref;}
+    public void deleteUserInfo(){
+        SharedPreferences.Editor userPrefEditor = userPref.edit();
+        userPrefEditor.clear();
+        userPrefEditor.apply();
+    }
+
+
+
+    public String getAuthorization(){return userPref.getString("Authorization", "");}
+
+    public Long getLastTokenTime(){return userPref.getLong("last_token_time", 0);}
+
+    public boolean isRemember(){return userPref.getBoolean("is_remember", false);}
+
+    public String getAccount(){return userPref.getString("account", "");}
+
+    public String getProfileUrl(){return userPref.getString("profile_url", null);}
+
+    public String getName(){return userPref.getString("name", "404");}
+
+    public String getEmail(){return userPref.getString("email", "404");}
+
+    public String getPassword(){return userPref.getString("password", "");}
+
+    public String getRefreshToken(){return userPref.getString("refresh_token", "");}
+
+    public String getDeviceToken(){return userPref.getString("device_token", "");}
+
+
 
 
 

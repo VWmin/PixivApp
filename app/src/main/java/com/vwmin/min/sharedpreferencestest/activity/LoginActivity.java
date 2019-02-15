@@ -1,7 +1,6 @@
-package com.vwmin.min.sharedpreferencestest;
+package com.vwmin.min.sharedpreferencestest.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
+import com.vwmin.min.sharedpreferencestest.R;
 import com.vwmin.min.sharedpreferencestest.adapters.IllustAdapter;
 import com.vwmin.min.sharedpreferencestest.network.AppRetrofit;
 import com.vwmin.min.sharedpreferencestest.network.LoginRetrofit;
@@ -184,7 +184,7 @@ public class LoginActivity extends BaseActivity  implements  View.OnClickListene
                 }
                 else {
                     Toast.makeText(LoginActivity.this, "网络似乎出了点问题，请重新登陆", Toast.LENGTH_LONG).show();
-                    ActivityCollection.forceOffline();
+
                 }
             }
 
@@ -231,6 +231,7 @@ public class LoginActivity extends BaseActivity  implements  View.OnClickListene
                 if(illustsResponse != null && illustsResponse.getIllusts() != null){
                     IllustAdapter adapter = new IllustAdapter(Illust.parserIllustsResponse(illustsResponse), LoginActivity.this);
                     adapter.setClickable(false);
+                    adapter.setShowFavorite(false);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLoopEnabled(true);
                     recyclerView.setPointTouch(false);

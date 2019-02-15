@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SharedPreferencesTest</string>
+    <string name="app_name">Pixiv</string>
     <string name="edit_account">pixiv ID或邮箱地址</string>
     <string name="edit_password">密码:</string>
     <string name="button_login">登陆</string>
@@ -15,11 +15,13 @@
     <string name="not_login">未登录</string>
     <string name="not_auth_email">未绑定邮箱</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="recommend">推荐</string>
     <string name="discovery">发现</string>
     <string name="mine">我的</string>
     <string name="search">search</string>
     <string name="download">下载原图</string>
+    <string name="clear_view_history">清空浏览记录</string>
+    <string name="signOut">注销</string>
 </resources>

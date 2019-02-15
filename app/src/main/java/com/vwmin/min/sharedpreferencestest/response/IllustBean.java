@@ -8,7 +8,7 @@ import java.util.List;
 public class IllustBean implements Serializable {
 
 
-    private long id;
+    private int id;
     private String title;
     private String type;
     private ImageUrlsBean image_urls;
@@ -32,25 +32,12 @@ public class IllustBean implements Serializable {
     private List<String> tools;
     private List<MetaPagesBean> meta_pages;
 
-//    // 按照id找到匹配项并删除杂余
-//    private static IllustBean findIllustById(long id){
-//        List<IllustBean> matches = Operator.where("id == ?", ""+id).find(IllustBean.class);
-//        if(matches == null || matches.size() == 0){
-//            return null;
-//        }else{
-//            for(int i=1; i<matches.size(); i++) matches.get(i).deleteAsync();
-//        }
-//        return matches.get(0);
-//    }
 
-
-
-
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

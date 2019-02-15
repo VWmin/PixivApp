@@ -1,17 +1,13 @@
 package com.vwmin.min.sharedpreferencestest.fragment;
 
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.rey.material.widget.ProgressView;
 import com.vwmin.min.sharedpreferencestest.R;
-import com.vwmin.min.sharedpreferencestest.fragment.mine.FragShowHistory;
+import com.vwmin.min.sharedpreferencestest.fragment.frag.FragShowHistory;
 
 public class MineFragment extends BaseFragment {
     private Fragment[] fragments;
@@ -22,13 +18,14 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public int setLayoutId() {
-        return R.layout.fragment_mine;
+        return R.layout.fragment_viewpager;
     }
 
     @Override
     public void initView(View view) {
         viewPager = view.findViewById(R.id.viewPager_mine);
         tab = view.findViewById(R.id.tabPage_mine);
+        tab.setTabMode(TabLayout.MODE_FIXED);
         fragments = new Fragment[]{new FragShowHistory()};
 
         viewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
@@ -55,4 +52,14 @@ public class MineFragment extends BaseFragment {
     public void initData() {
 
     }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            fragments[0].onHiddenChanged(false);
+        }
+    }
+
+
 }

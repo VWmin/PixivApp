@@ -15,7 +15,7 @@
         android:elevation="12dp"
         android:fitsSystemWindows="true"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
+        app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
         app:titleTextColor="#fff"/>
 
     <android.support.v4.view.ViewPager
