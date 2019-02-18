@@ -68,8 +68,8 @@ public class FragShowHistory extends BaseFragment {
         Log.d("ViewHistoryOperator", "received");
 
         Illust newIllust = illustChangeEvent.getNewIllust();
-        ViewHistoryOperator.refreshFollowStatus(newIllust.getIllust_id(), newIllust.isUser_isFollowed());
-        ViewHistoryOperator.refreshStarStatus(newIllust.getIllust_id(), newIllust.isBookmarked());
+        ViewHistoryOperator.refreshFollowStatus(newIllust);
+        ViewHistoryOperator.refreshStarStatus(newIllust);
 
     }
 
@@ -133,7 +133,7 @@ public class FragShowHistory extends BaseFragment {
         }else {
             recyclerView.setVisibility(View.VISIBLE);
             imageView.setVisibility(View.GONE);
-            if(illustList != null) illustList.clear();
+            illustList.clear();
             for(ViewHistory viewHistory:viewHistoryList)
                 illustList.add(Illust.parserViewHistory(viewHistory));
             illustAdapter = new IllustAdapter(illustList, getContext());

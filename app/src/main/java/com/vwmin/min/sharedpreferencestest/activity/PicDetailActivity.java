@@ -70,8 +70,6 @@ public class PicDetailActivity extends BaseActivity {
             frags.add(FragPerPic.newInstance(illust));
 
 
-
-
         viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int i) {

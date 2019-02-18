@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.vwmin.min.sharedpreferencestest.activity.PicDetailActivity;
 import com.vwmin.min.sharedpreferencestest.R;
 import com.vwmin.min.sharedpreferencestest.data.UserInfo;
+import com.vwmin.min.sharedpreferencestest.data.ViewHistory;
 import com.vwmin.min.sharedpreferencestest.event.IllustChangeEvent;
 import com.vwmin.min.sharedpreferencestest.network.AppRetrofit;
 import com.vwmin.min.sharedpreferencestest.response.Illust;
