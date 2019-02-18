@@ -84,6 +84,7 @@ public class Illust implements Serializable {
         tmpIllust.setUser_isFollowed(viewHistory.isUser_isFollowed());
         tmpIllust.setTotal_viewed(viewHistory.getTotal_viewed());
         tmpIllust.setTotal_bookmarks(viewHistory.getTotal_bookmarks());
+        tmpIllust.setBookmarked(viewHistory.isBookmarked());
         tmpIllust.setTitle(viewHistory.getTitle());
         tmpIllust.setCaption(viewHistory.getCaption());
         tmpIllust.setWidth(viewHistory.getWidth());

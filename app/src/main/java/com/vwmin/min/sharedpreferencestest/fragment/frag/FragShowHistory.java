@@ -124,7 +124,7 @@ public class FragShowHistory extends BaseFragment {
     private void onRefreshListener(){
         progressBar.setVisibility(View.VISIBLE);
         List<ViewHistory> viewHistoryList = findAll(ViewHistory.class);
-        Collections.sort(viewHistoryList);
+//        Collections.sort(viewHistoryList);
         // 无历史记录，显示NO DATA
         if(viewHistoryList.size()==0){
             Log.d("history", "There is no more history.");
