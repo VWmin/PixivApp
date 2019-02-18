@@ -124,7 +124,7 @@ public class FragShowHistory extends BaseFragment {
     private void onRefreshListener(){
         progressBar.setVisibility(View.VISIBLE);
         List<ViewHistory> viewHistoryList = findAll(ViewHistory.class);
-//        Collections.sort(viewHistoryList);
+        Collections.sort(viewHistoryList);
         // 无历史记录，显示NO DATA
         if(viewHistoryList.size()==0){
             Log.d("history", "There is no more history.");
@@ -134,8 +134,7 @@ public class FragShowHistory extends BaseFragment {
             recyclerView.setVisibility(View.VISIBLE);
             imageView.setVisibility(View.GONE);
             illustList.clear();
-            for(ViewHistory viewHistory:viewHistoryList)
-                illustList.add(Illust.parserViewHistory(viewHistory));
+            illustList.addAll(viewHistoryList);
             illustAdapter = new IllustAdapter(illustList, getContext());
             recyclerView.setAdapter(illustAdapter);
         }

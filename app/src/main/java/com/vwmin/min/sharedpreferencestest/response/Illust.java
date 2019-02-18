@@ -4,14 +4,18 @@ import android.view.View;
 
 import com.vwmin.min.sharedpreferencestest.data.ViewHistory;
 
+import org.litepal.annotation.Column;
+import org.litepal.crud.LitePalSupport;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
 // 将IllustsResponse转换成Illust集合, 或将IllustResponse转换成单个illust对象
-public class Illust implements Serializable {
-    private int illust_id;
+public class Illust extends LitePalSupport implements Serializable {
+    private int id;
+    @Column(unique = true) private int illust_id;
     private String medium_url;
     private int page_count;
     private String user_name;
@@ -26,7 +30,6 @@ public class Illust implements Serializable {
     private int width;
     private int height;
     private List<String> meta_pages;
-
 
     public static List<Illust> parserIllustsResponse(IllustsResponse illustsResponse){
         List<Illust> tmpIllustList = new ArrayList<>();
@@ -73,26 +76,6 @@ public class Illust implements Serializable {
         return tmpIllust;
     }
 
-    public static Illust parserViewHistory(ViewHistory viewHistory){
-        Illust tmpIllust = new Illust();
-        tmpIllust.setIllust_id(viewHistory.getIllust_id());
-        tmpIllust.setMedium_url(viewHistory.getMedium_url());
-        tmpIllust.setPage_count(viewHistory.getPage_count());
-        tmpIllust.setUser_name(viewHistory.getUser_name());
-        tmpIllust.setUser_id(viewHistory.getUser_id());
-        tmpIllust.setUser_profile(viewHistory.getUser_profile());
-        tmpIllust.setUser_isFollowed(viewHistory.isUser_isFollowed());
-        tmpIllust.setTotal_viewed(viewHistory.getTotal_viewed());
-        tmpIllust.setTotal_bookmarks(viewHistory.getTotal_bookmarks());
-        tmpIllust.setBookmarked(viewHistory.isBookmarked());
-        tmpIllust.setTitle(viewHistory.getTitle());
-        tmpIllust.setCaption(viewHistory.getCaption());
-        tmpIllust.setWidth(viewHistory.getWidth());
-        tmpIllust.setHeight(viewHistory.getHeight());
-        tmpIllust.setMeta_pages(viewHistory.getMeta_pages());
-        return tmpIllust;
-    }
-
     public static List<Illust> parserSearchResponse(SearchResponse searchResponse){
         List<Illust> Illust = new ArrayList<>();
         for(SearchResponse.ResponseBean s:searchResponse.getResponse()){
@@ -120,11 +103,19 @@ public class Illust implements Serializable {
         return Illust;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getIllust_id() {
         return illust_id;
     }
 
-    private void setIllust_id(int illust_id) {
+    protected void setIllust_id(int illust_id) {
         this.illust_id = illust_id;
     }
 
@@ -132,7 +123,7 @@ public class Illust implements Serializable {
         return medium_url;
     }
 
-    private void setMedium_url(String medium_url) {
+    protected void setMedium_url(String medium_url) {
         this.medium_url = medium_url;
     }
 
@@ -140,7 +131,7 @@ public class Illust implements Serializable {
         return page_count;
     }
 
-    private void setPage_count(int page_count) {
+    protected void setPage_count(int page_count) {
         this.page_count = page_count;
     }
 
@@ -148,7 +139,7 @@ public class Illust implements Serializable {
         return user_name;
     }
 
-    private void setUser_name(String user_name) {
+    protected void setUser_name(String user_name) {
         this.user_name = user_name;
     }
 
@@ -156,7 +147,7 @@ public class Illust implements Serializable {
         return user_id;
     }
 
-    private void setUser_id(int user_id) {
+    protected void setUser_id(int user_id) {
         this.user_id = user_id;
     }
 
@@ -164,7 +155,7 @@ public class Illust implements Serializable {
         return user_profile;
     }
 
-    private void setUser_profile(String user_profile) {
+    protected void setUser_profile(String user_profile) {
         this.user_profile = user_profile;
     }
 
@@ -180,7 +171,7 @@ public class Illust implements Serializable {
         return total_viewed;
     }
 
-    private void setTotal_viewed(int total_viewed) {
+    protected void setTotal_viewed(int total_viewed) {
         this.total_viewed = total_viewed;
     }
 
@@ -188,7 +179,7 @@ public class Illust implements Serializable {
         return total_bookmarks;
     }
 
-    private void setTotal_bookmarks(int total_bookmarks) {
+    protected void setTotal_bookmarks(int total_bookmarks) {
         this.total_bookmarks = total_bookmarks;
     }
 
@@ -196,7 +187,7 @@ public class Illust implements Serializable {
         return title;
     }
 
-    private void setTitle(String title) {
+    protected void setTitle(String title) {
         this.title = title;
     }
 
@@ -204,7 +195,7 @@ public class Illust implements Serializable {
         return caption;
     }
 
-    private void setCaption(String caption) {
+    protected void setCaption(String caption) {
         this.caption = caption;
     }
 
@@ -228,7 +219,7 @@ public class Illust implements Serializable {
         return meta_pages;
     }
 
-    private void setMeta_pages(List<String> meta_pages) {
+    protected void setMeta_pages(List<String> meta_pages) {
         this.meta_pages = meta_pages;
     }
 
