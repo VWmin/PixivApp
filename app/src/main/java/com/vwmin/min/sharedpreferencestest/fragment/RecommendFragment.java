@@ -7,13 +7,14 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.vwmin.min.sharedpreferencestest.R;
+import com.vwmin.min.sharedpreferencestest.fragment.frag.FragTrendTag;
 import com.vwmin.min.sharedpreferencestest.fragment.frag.FragRcmdFU;
 
 public class RecommendFragment  extends BaseFragment {
     private Fragment[] fragments;
     private ViewPager viewPager;
     private TabLayout tab;
-    private static final String TITLES[] = {"为你推荐"};
+    private static final String TITLES[] = {"为你推荐", "热门标签"};
 
     @Override
     public int setLayoutId() {
@@ -22,7 +23,7 @@ public class RecommendFragment  extends BaseFragment {
 
     @Override
     public void initView(View view) {
-        fragments = new Fragment[]{new FragRcmdFU()};
+        fragments = new Fragment[]{new FragRcmdFU(), new FragTrendTag()};
 
         // 通过view Pager翻页
         viewPager = view.findViewById(R.id.viewPager_mine);

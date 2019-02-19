@@ -9,6 +9,7 @@ import com.vwmin.min.sharedpreferencestest.response.IllustResponse;
 import com.vwmin.min.sharedpreferencestest.response.IllustsResponse;
 import com.vwmin.min.sharedpreferencestest.response.LoginResponse;
 import com.vwmin.min.sharedpreferencestest.response.NullResponse;
+import com.vwmin.min.sharedpreferencestest.response.TrendTagsResponse;
 import com.vwmin.min.sharedpreferencestest.utils.AfterComplete;
 import com.vwmin.min.sharedpreferencestest.data.UserInfo;
 
@@ -138,6 +139,7 @@ public class AppRetrofit {
                 .subscribe(observer);
     }
 
+    // 收藏图片
     public void starIllust(Observer<NullResponse> observer,
                            String authorization,
                            String id,
@@ -150,6 +152,7 @@ public class AppRetrofit {
                 .subscribe(observer);
     }
 
+     // 取消收藏
     public void unStarIllust(Observer<NullResponse> observer,
                              String authorization,
                              String id){
@@ -160,6 +163,7 @@ public class AppRetrofit {
                 .subscribe(observer);
     }
 
+    // 关注用户
     public void followUser(Observer<NullResponse> observer,
                            String authorization,
                            String userId,
@@ -171,6 +175,7 @@ public class AppRetrofit {
                 .subscribe(observer);
     }
 
+    // 取消关注
     public void unFollowUser(Observer<NullResponse> observer,
                            String authorization,
                            String userId){
@@ -181,6 +186,16 @@ public class AppRetrofit {
                 .subscribe(observer);
     }
 
+    // 获取热门标签
+    public void getTrendTags(Observer<TrendTagsResponse> observer,
+                             String authorization,
+                             String filter){
+        appApi.getTrendTags(authorization, filter)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
 
 
     // 如果token过期则重拿token, 否则执行传入函数动作
@@ -337,6 +352,15 @@ public class AppRetrofit {
         @POST("/v1/user/follow/delete")
         Observable<NullResponse> unFollowUser(@Header("Authorization") String authorization,
                                               @Field("user_id") String userId);
+
+
+        /**
+         * 获取热门标签
+         *
+         */
+        @GET("/v1/trending-tags/illust")
+        Observable<TrendTagsResponse> getTrendTags(@Header("Authorization") String authorization,
+                                                   @Query("filter") String filter);
 
 
     }
