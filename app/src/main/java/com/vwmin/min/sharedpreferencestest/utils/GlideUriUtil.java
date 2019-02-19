@@ -27,11 +27,18 @@ public class GlideUriUtil {
 
 
     public static GlideUrl getImgByIllust(Illust illust){
-        return new GlideUrl(illust.getMedium_url(), HEADERS);
+        if(illust.getMedium_url()!=null)
+            return new GlideUrl(illust.getMedium_url(), HEADERS);
+        else
+            return new GlideUrl("https://github.com/LitePalFramework/LitePal/blob/master/sample/src/main/logo/mini_logo.png");
     }
 
     public static GlideUrl getImgByUrl(String imageUrl){
-        return new GlideUrl(imageUrl, HEADERS);
+        if(imageUrl != null)
+            return new GlideUrl(imageUrl, HEADERS);
+        else
+            return new GlideUrl("https://github.com/LitePalFramework/LitePal/blob/master/sample/src/main/logo/mini_logo.png");
+
     }
 
 

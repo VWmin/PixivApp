@@ -193,7 +193,7 @@ public class FragPerPic extends BaseFragment implements View.OnClickListener {
     }
 
     private String getFirstImg(){
-        Log.d("urlExistChk", illust.getMeta_pages().get(0));
+//        Log.d("urlExistChk", illust.getMeta_pages().get(0));
 //        return illust.getMeta_pages().get(0);
 //
         return illust.getMedium_url();

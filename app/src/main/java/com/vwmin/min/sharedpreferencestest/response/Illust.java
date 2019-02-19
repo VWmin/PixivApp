@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.vwmin.min.sharedpreferencestest.data.ViewHistory;
 
+import org.litepal.Operator;
 import org.litepal.annotation.Column;
 import org.litepal.crud.LitePalSupport;
 
@@ -11,11 +12,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.litepal.Operator.where;
+
 
 // 将IllustsResponse转换成Illust集合, 或将IllustResponse转换成单个illust对象
 public class Illust extends LitePalSupport implements Serializable {
     private int id;
-    @Column(unique = true) private int illust_id;
+    private int illust_id;
     private String medium_url;
     private int page_count;
     private String user_name;

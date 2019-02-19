@@ -10,6 +10,8 @@ import org.litepal.crud.LitePalSupport;
 
 import java.util.List;
 
+import static org.litepal.Operator.where;
+
 
 // 一个实例对应一条记录
 public class ViewHistory extends Illust implements Comparable<ViewHistory> {
@@ -17,6 +19,23 @@ public class ViewHistory extends Illust implements Comparable<ViewHistory> {
     private long time;
 
     public ViewHistory(Illust illust){
+        init(illust);
+        setTime();
+    }
+
+    public ViewHistory(){}
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime() {
+        this.time = System.currentTimeMillis();
+    }
+
+    public void setTime(long time){this.time = time;}
+
+    public void init(Illust illust){
         setIllust_id(illust.getIllust_id());
         setMedium_url(illust.getMedium_url());
         setPage_count(illust.getPage_count());
@@ -32,17 +51,6 @@ public class ViewHistory extends Illust implements Comparable<ViewHistory> {
         setWidth(illust.getWidth());
         setHeight(illust.getHeight());
         setMeta_pages(illust.getMeta_pages());
-        setTime();
-    }
-
-    public ViewHistory(){}
-
-    public long getTime() {
-        return time;
-    }
-
-    public void setTime() {
-        this.time = System.currentTimeMillis();
     }
 
     @Override
