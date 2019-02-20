@@ -1,6 +1,7 @@
 package com.vwmin.min.sharedpreferencestest.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.vwmin.min.sharedpreferencestest.R;
+import com.vwmin.min.sharedpreferencestest.activity.ShowSearchActivity;
 import com.vwmin.min.sharedpreferencestest.response.TrendTagsResponse;
 import com.vwmin.min.sharedpreferencestest.response.TrendTagsResponse.TrendTagsBean;
 import com.vwmin.min.sharedpreferencestest.utils.GlideUriUtil;
@@ -80,6 +82,12 @@ public class TrendTagAdapter extends RecyclerView.Adapter<TrendTagAdapter.ViewHo
                 .error(R.mipmap.no_data)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(viewHolder.imageView);
+
+        viewHolder.imageView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ShowSearchActivity.class);
+            intent.putExtra("tag", trendTags.get(i).getTag());
+            context.startActivity(intent);
+        });
     }
 
     @Override

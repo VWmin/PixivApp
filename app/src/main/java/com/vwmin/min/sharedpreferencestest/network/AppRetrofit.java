@@ -362,6 +362,13 @@ public class AppRetrofit {
         Observable<TrendTagsResponse> getTrendTags(@Header("Authorization") String authorization,
                                                    @Query("filter") String filter);
 
+//        /**
+//         * 按标签搜索
+//         *
+//         */
+//        @GET("/v1/search/illust")
+//        Observable<>
+
 
     }
 
