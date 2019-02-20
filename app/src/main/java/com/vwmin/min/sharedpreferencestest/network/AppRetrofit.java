@@ -197,6 +197,17 @@ public class AppRetrofit {
                 .subscribe(observer);
     }
 
+    // 搜索
+    public void searchIllust(Observer<IllustsResponse> observer,
+                             String authorization,
+                             String word, String search_target, String sort, String filter){
+        appApi.searchIllust(authorization, word, search_target, sort, filter)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
 
     // 如果token过期则重拿token, 否则执行传入函数动作
     public void chkToken(Context context, AfterComplete afterComplete){
@@ -362,12 +373,16 @@ public class AppRetrofit {
         Observable<TrendTagsResponse> getTrendTags(@Header("Authorization") String authorization,
                                                    @Query("filter") String filter);
 
-//        /**
-//         * 按标签搜索
-//         *
-//         */
-//        @GET("/v1/search/illust")
-//        Observable<>
+        /**
+         * 按标签搜索
+         *
+         */
+        @GET("/v1/search/illust")
+        Observable<IllustsResponse> searchIllust(@Header("Authorization") String authorization,
+                                        @Query("word") String word,
+                                        @Query("search_target") String search_target,
+                                        @Query("sort") String sort,
+                                        @Query("filter") String filter);
 
 
     }

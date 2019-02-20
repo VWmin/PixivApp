@@ -88,6 +88,7 @@ public class TrendTagAdapter extends RecyclerView.Adapter<TrendTagAdapter.ViewHo
             intent.putExtra("tag", trendTags.get(i).getTag());
             context.startActivity(intent);
         });
+
     }
 
     @Override

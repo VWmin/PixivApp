@@ -1,18 +1,11 @@
 package com.vwmin.min.sharedpreferencestest.response;
 
-import android.view.View;
 
-import com.vwmin.min.sharedpreferencestest.data.ViewHistory;
-
-import org.litepal.Operator;
-import org.litepal.annotation.Column;
 import org.litepal.crud.LitePalSupport;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.litepal.Operator.where;
 
 
 // 将IllustsResponse转换成Illust集合, 或将IllustResponse转换成单个illust对象
@@ -79,32 +72,32 @@ public class Illust extends LitePalSupport implements Serializable {
         return tmpIllust;
     }
 
-    public static List<Illust> parserSearchResponse(SearchResponse searchResponse){
-        List<Illust> Illust = new ArrayList<>();
-        for(SearchResponse.ResponseBean s:searchResponse.getResponse()){
-//            if(s.getAge_limit().equals("r18")) continue;
-            Illust tmp = new Illust();
-            tmp.setIllust_id(s.getId());
-            tmp.setMedium_url(s.getImage_urls().getPx_480mw().replace("480x960", "540x540_70"));
-            tmp.setPage_count(s.getPage_count());
-            tmp.setUser_name(s.getUser().getName());
-            tmp.setUser_id(s.getUser().getId());
-            tmp.setUser_profile(s.getUser().getProfile_image_urls().getPx_50x50());
-            tmp.setUser_isFollowed(s.getUser().isIs_following());
-            tmp.setTotal_viewed(s.getStats().getViews_count());
-            tmp.setTotal_bookmarks(s.getStats().getFavorited_count().getPublicX());
-            tmp.setBookmarked(s.isIs_liked());
-            tmp.setTitle(s.getTitle());
-            tmp.setCaption(s.getCaption());
-            tmp.setWidth(s.getWidth());
-            tmp.setHeight(s.getHeight());
-            List<String> metaPages = new ArrayList<>();
-            metaPages.add(s.getImage_urls().getLarge());
-            tmp.setMeta_pages(metaPages);
-            Illust.add(tmp);
-        }
-        return Illust;
-    }
+//    public static List<Illust> parserSearchResponse(SearchResponse searchResponse){
+//        List<Illust> Illust = new ArrayList<>();
+//        for(SearchResponse.ResponseBean s:searchResponse.getResponse()){
+////            if(s.getAge_limit().equals("r18")) continue;
+//            Illust tmp = new Illust();
+//            tmp.setIllust_id(s.getId());
+//            tmp.setMedium_url(s.getImage_urls().getPx_480mw().replace("480x960", "540x540_70"));
+//            tmp.setPage_count(s.getPage_count());
+//            tmp.setUser_name(s.getUser().getName());
+//            tmp.setUser_id(s.getUser().getId());
+//            tmp.setUser_profile(s.getUser().getProfile_image_urls().getPx_50x50());
+//            tmp.setUser_isFollowed(s.getUser().isIs_following());
+//            tmp.setTotal_viewed(s.getStats().getViews_count());
+//            tmp.setTotal_bookmarks(s.getStats().getFavorited_count().getPublicX());
+//            tmp.setBookmarked(s.isIs_liked());
+//            tmp.setTitle(s.getTitle());
+//            tmp.setCaption(s.getCaption());
+//            tmp.setWidth(s.getWidth());
+//            tmp.setHeight(s.getHeight());
+//            List<String> metaPages = new ArrayList<>();
+//            metaPages.add(s.getImage_urls().getLarge());
+//            tmp.setMeta_pages(metaPages);
+//            Illust.add(tmp);
+//        }
+//        return Illust;
+//    }
 
     public int getId() {
         return id;

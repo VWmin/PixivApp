@@ -14,9 +14,10 @@ import com.scwang.smartrefresh.header.DeliveryHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.vwmin.min.sharedpreferencestest.R;
 import com.vwmin.min.sharedpreferencestest.adapters.IllustAdapter;
-import com.vwmin.min.sharedpreferencestest.network.SearchRetrofit;
+import com.vwmin.min.sharedpreferencestest.data.UserInfo;
+import com.vwmin.min.sharedpreferencestest.network.AppRetrofit;
 import com.vwmin.min.sharedpreferencestest.response.Illust;
-import com.vwmin.min.sharedpreferencestest.response.SearchResponse;
+import com.vwmin.min.sharedpreferencestest.response.IllustsResponse;
 import com.vwmin.min.sharedpreferencestest.utils.Density;
 import com.vwmin.min.sharedpreferencestest.utils.GridItemDecoration;
 
@@ -38,8 +39,7 @@ public class ShowSearchActivity extends BaseActivity {
     private IllustAdapter illustAdapter;
     private List<Illust> illusts = new ArrayList<>();
     private String query;
-    private int currentPage = 1;
-
+    private String nextUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,16 +87,17 @@ public class ShowSearchActivity extends BaseActivity {
 
 
     private void onRefreshListener() {
-        Observer<SearchResponse> observer = new Observer<SearchResponse>() {
+        Observer<IllustsResponse> observer = new Observer<IllustsResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
                 progressBar.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void onNext(SearchResponse searchResponse) {
-                if(searchResponse!=null && searchResponse.getResponse()!=null){
-                    illusts = Illust.parserSearchResponse(searchResponse);
+            public void onNext(IllustsResponse illustsResponse) {
+                if(illustsResponse!=null && illustsResponse.getIllusts()!=null){
+                    illusts = Illust.parserIllustsResponse(illustsResponse);
+                    nextUrl = illustsResponse.getNext_url();
                     if(illusts.size()!=0) {
                         illustAdapter = new IllustAdapter(illusts, ShowSearchActivity.this);
                         recyclerView.setAdapter(illustAdapter);
@@ -119,24 +120,26 @@ public class ShowSearchActivity extends BaseActivity {
                 refreshLayout.finishRefresh(true);
             }
         };
-        SearchRetrofit.getInstance().getSearchAsTag(observer, query+"1000users入り", "desc", "1");
+        AppRetrofit.getInstance().searchIllust(observer, UserInfo.getInstance(this).getAuthorization(),
+                 query, "partial_match_for_tags", "date_desc", "for_android");
     }
 
     private void onLoadMoreListener(){
-        currentPage+=1;
-        Observer<SearchResponse> observer = new Observer<SearchResponse>() {
+        Observer<IllustsResponse> observer = new Observer<IllustsResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
+
             }
 
             @Override
-            public void onNext(SearchResponse searchResponse) {
-                if(searchResponse!=null && searchResponse.getResponse()!=null){
-                    illusts.addAll(Illust.parserSearchResponse(searchResponse));
-                    illustAdapter.notifyItemRangeChanged(illusts.size()-searchResponse.getResponse().size(),
-                            searchResponse.getResponse().size());
-
+            public void onNext(IllustsResponse illustsResponse) {
+                if(illustsResponse!=null && illustsResponse.getIllusts()!=null){
+                    nextUrl = illustsResponse.getNext_url();
+                    illusts.addAll(Illust.parserIllustsResponse(illustsResponse));
+                    illustAdapter.notifyItemRangeChanged(illusts.size()-illustsResponse.getIllusts().size(),
+                            illustsResponse.getIllusts().size());
                 }
+
             }
 
             @Override
@@ -150,8 +153,8 @@ public class ShowSearchActivity extends BaseActivity {
                 refreshLayout.finishLoadMore(true);
             }
         };
-        SearchRetrofit.getInstance().getSearchAsTag(observer, query+"1000users入り", "desc", currentPage+"");
-
+        AppRetrofit.getInstance().getNext(observer,
+                UserInfo.getInstance(this).getAuthorization(), nextUrl);
     }
 
 
