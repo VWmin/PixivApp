@@ -17,8 +17,7 @@
         android:supportsRtl="true"
         android:name="org.litepal.LitePalApplication"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".activity.MainActivity">
-        </activity>
+        <activity android:name=".activity.MainActivity"/>
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +27,9 @@
         <activity android:name=".activity.PicDetailActivity" />
         <activity android:name=".activity.ShowSearchActivity" />
         <activity android:name=".activity.PicMasterActivity" />
+        <activity android:name=".activity.TestActivity" >
+
+        </activity>
 
     </application>
 

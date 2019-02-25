@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activity.ShowSearchActivity">
+
+    <item
+        android:id="@+id/search_badge"
+        android:title="@string/search"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:orderInCategory="100"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always|collapseActionView"
+        app:iconifiedByDefault="false"
+        app:background="@drawable/shape_searchview"/>
+
+
+</menu>

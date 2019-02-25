@@ -7,9 +7,10 @@
     <item
         android:id="@+id/search_badge"
         android:title="@string/search"
-        app:actionViewClass="android.support.v7.widget.SearchView"
         android:icon="@drawable/ic_search_white_24dp"
         android:orderInCategory="100"
         app:showAsAction="always|collapseActionView"/>
+    <!--app:actionViewClass="android.support.v7.widget.SearchView"-->
+
 
 </menu>

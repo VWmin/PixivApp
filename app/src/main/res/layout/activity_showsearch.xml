@@ -1,92 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-    <!--<android.support.design.widget.CoordinatorLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/CustomActionBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/anchor"
+        <LinearLayout
+            android:id="@+id/line1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top">
+            android:orientation="horizontal">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_show_search_query"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:background="@color/colorPrimary"
-                android:fitsSystemWindows="true"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_scrollFlags="scroll|enterAlways|snap"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:title="@string/search"
-                app:titleTextColor="#fff" />
-
-        </android.support.design.widget.AppBarLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#ffffff">
-
-            <com.scwang.smartrefresh.layout.SmartRefreshLayout
-                android:id="@+id/refreshLayout_in_acti_search"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintTop_toBottomOf="@+id/anchor">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycle_in_acti_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-
-            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
             <ImageView
-                android:id="@+id/image_in_acti_search"
-                android:layout_width="match_parent"
+                android:id="@+id/activity_search_back"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:scaleType="center"
-                android:src="@mipmap/no_result"
-                android:visibility="gone" />
+                android:gravity="center"
+                android:layout_marginStart="@dimen/sixteen_dip"
+                android:src="@drawable/ic_arrow_back_white_24dp" />
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/search_badge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:icon="@drawable/ic_search_white_24dp"
+                android:orderInCategory="100"
+                android:title="@string/search"
+                app:background="@drawable/shape_searchview"
+                app:layout_constraintLeft_toRightOf="@id/activity_search_back">
+
+            </android.support.v7.widget.SearchView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="@dimen/eight_dip"
+            android:padding="10dp"
+            android:divider="@drawable/divider"
+            android:showDividers="end"
+            app:layout_constraintTop_toBottomOf="@id/line1">
 
 
-        </FrameLayout>
+            <com.rey.material.widget.Button
+                android:id="@+id/search_button1"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:background="@color/transport"
+                android:text="插画•漫画"
+                android:textColor="@color/black"
+                android:alpha="0.45"
+                android:textSize="12sp" />
+
+            <com.rey.material.widget.Button
+                android:id="@+id/search_button2"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:background="@color/transport"
+                android:text="小说"
+                android:textColor="@color/black"
+                android:alpha="0.45"
+                android:textSize="12sp" />
+
+            <com.rey.material.widget.Button
+                android:id="@+id/search_button3"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:background="@color/transport"
+                android:text="用户"
+                android:textColor="@color/black"
+                android:alpha="0.45"
+                android:textSize="12sp" />
+
+        </LinearLayout>
 
 
-    </LinearLayout>
 
+    </android.support.constraint.ConstraintLayout>
 
-    <ProgressBar
-        android:id="@+id/progress_in_acti_search"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/search_suggestion"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:gravity="center_vertical"
+        android:textSize="12sp"
+        android:textColor="@color/gray"
+        android:layout_marginStart="@dimen/sixteen_dip"
+
+        app:layout_constraintTop_toBottomOf="@id/CustomActionBar"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/search_list"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout"/>
+        app:layout_constraintTop_toBottomOf="@id/search_suggestion"/>
 
-
-
-    <!--</android.support.design.widget.CoordinatorLayout>-->
-
+    <TextView
+        android:id="@+id/search_clear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray"
+        android:textSize="15sp"
+        android:text="清空搜索记录"
+        app:layout_constraintTop_toBottomOf="@id/search_list"
+        android:gravity="center" />
 
 
 
 
 </android.support.constraint.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto">-->
+
+
+    <!--<android.support.design.widget.CoordinatorLayout-->
+        <!--android:id="@+id/linearLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--<android.support.design.widget.AppBarLayout-->
+            <!--android:id="@+id/anchor"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:fitsSystemWindows="true"-->
+            <!--android:layout_gravity="top">-->
+
+            <!--<android.support.v7.widget.Toolbar-->
+                <!--android:id="@+id/toolbar_show_search_query"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="?attr/actionBarSize"-->
+                <!--android:background="@color/colorPrimary"-->
+                <!--android:fitsSystemWindows="true"-->
+                <!--app:layout_constraintTop_toTopOf="parent"-->
+                <!--app:layout_scrollFlags="scroll|enterAlways|snap"-->
+                <!--app:navigationIcon="@drawable/ic_arrow_back_white_24dp"-->
+                <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->
+                <!--app:title="@string/search"-->
+                <!--app:titleTextColor="#fff" />-->
+
+        <!--</android.support.design.widget.AppBarLayout>-->
+
+        <!--<FrameLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="#ffffff">-->
+
+            <!--<com.scwang.smartrefresh.layout.SmartRefreshLayout-->
+                <!--android:id="@+id/refreshLayout_in_acti_search"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/anchor">-->
+
+                <!--<android.support.v7.widget.RecyclerView-->
+                    <!--android:id="@+id/recycle_in_acti_search"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent" />-->
+
+
+            <!--</com.scwang.smartrefresh.layout.SmartRefreshLayout>-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/image_in_acti_search"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:scaleType="center"-->
+                <!--android:src="@mipmap/no_result"-->
+                <!--android:visibility="gone" />-->
+
+
+        <!--</FrameLayout>-->
+
+
+    <!--</android.support.design.widget.CoordinatorLayout>-->
+
+
+    <!--<ProgressBar-->
+        <!--android:id="@+id/progress_in_acti_search"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:visibility="gone"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/linearLayout"-->
+        <!--app:layout_constraintEnd_toEndOf="@+id/linearLayout"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/linearLayout"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/linearLayout"/>-->
+
+
+<!--</android.support.constraint.ConstraintLayout>-->

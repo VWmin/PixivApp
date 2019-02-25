@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="40dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/query_edit"
+            android:layout_width="0dp"
+            android:layout_weight="9"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/sixteen_dip"
+            android:gravity="center_vertical"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:id="@+id/query_delete"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:maxHeight="16sp"
+            android:maxWidth="16sp"
+            android:layout_marginEnd="@dimen/sixteen_dip"
+            android:alpha="0.45"
+            android:src="@drawable/ic_delete_black_24dp"
+            tools:ignore="ContentDescription" />
+
+    </LinearLayout>
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+</android.support.constraint.ConstraintLayout>

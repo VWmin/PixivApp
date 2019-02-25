@@ -1,7 +1,7 @@
 package com.vwmin.min.sharedpreferencestest.data;
 
 import android.util.Log;
-import android.view.View;
+
 
 import com.vwmin.min.sharedpreferencestest.response.Illust;
 
@@ -9,13 +9,11 @@ import org.litepal.Operator;
 
 import java.util.List;
 
-import static org.litepal.Operator.aesKey;
-import static org.litepal.Operator.where;
 
 public class ViewHistoryOperator {
 
     public static void refreshClickTime(Illust illust){
-        List<ViewHistory> matches = where("illust_id = ?",
+        List<ViewHistory> matches = Operator.where("illust_id = ?",
                 String.valueOf(illust.getIllust_id())).find(ViewHistory.class);
         if(matches.size()==0) {
             ViewHistory viewHistory = new ViewHistory(illust);
@@ -31,7 +29,7 @@ public class ViewHistoryOperator {
     }
 
     public static void refreshFollowStatus(Illust illust){
-        List<ViewHistory> matches = where("illust_id = ?",
+        List<ViewHistory> matches = Operator.where("illust_id = ?",
                 illust.getIllust_id()+"").find(ViewHistory.class);
         if(matches.size()!=0){
             long time = matches.get(0).getTime();
@@ -49,7 +47,7 @@ public class ViewHistoryOperator {
 //        Log.d("refreshStarStatus", "newViewHistory_star: "+newViewHistory.isBookmarked());
 //        newViewHistory.updateAll("illust_id = ?", illust.getIllust_id()+"");
 
-        List<ViewHistory> matches = where("illust_id = ?",
+        List<ViewHistory> matches = Operator.where("illust_id = ?",
                 illust.getIllust_id()+"").find(ViewHistory.class);
         if(matches.size()!=0){
             long time = matches.get(0).getTime();
@@ -67,7 +65,7 @@ public class ViewHistoryOperator {
 
 
 
-        List<ViewHistory> matches2 = where("illust_id = ?",
+        List<ViewHistory> matches2 = Operator.where("illust_id = ?",
                 illust.getIllust_id()+"").find(ViewHistory.class);
         if(matches2.size()!=0) {
             Log.d("refreshStarStatus", "afterUpdate: " + matches2.get(0).isBookmarked()

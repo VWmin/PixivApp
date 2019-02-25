@@ -27,6 +27,7 @@
                 android:fitsSystemWindows="true"
                 android:layout_gravity="top">
 
+
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar_open_nav"
                     android:layout_width="match_parent"
@@ -36,21 +37,8 @@
                     app:layout_scrollFlags="scroll|enterAlways|snap"
                     app:navigationIcon="@drawable/ic_menu_black_24dp"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    app:title="Pixiv"
-                    app:titleTextColor="#fff" />
+                    app:titleTextColor="#fff"/>
 
-
-                <!--<android.support.design.widget.TabLayout-->
-                <!--android:id="@+id/tabPage_mine"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="40dp"-->
-                <!--android:background="@color/colorPrimary"-->
-                <!--app:layout_anchor="@id/anchor"-->
-                <!--app:layout_anchorGravity="bottom"-->
-                <!--app:tabIndicatorColor="#ffffff"-->
-                <!--app:tabIndicatorHeight="@dimen/two_dp"-->
-                <!--app:tabSelectedTextColor="#FFFFFF"-->
-                <!--app:tabTextColor="#FFFFFF" />-->
             </android.support.design.widget.AppBarLayout>
 
             <android.support.constraint.ConstraintLayout
@@ -91,9 +79,9 @@
 
         </android.support.design.widget.NavigationView>
 
+
+
     </android.support.v4.widget.DrawerLayout>
-
-
 
 
 

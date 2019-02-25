@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.vwmin.min.sharedpreferencestest.activity.ActivityCollection;
+import com.vwmin.min.sharedpreferencestest.response.AutoCompleteResponse;
 import com.vwmin.min.sharedpreferencestest.response.IllustResponse;
 import com.vwmin.min.sharedpreferencestest.response.IllustsResponse;
 import com.vwmin.min.sharedpreferencestest.response.LoginResponse;
@@ -208,6 +209,17 @@ public class AppRetrofit {
                 .subscribe(observer);
     }
 
+    // 搜索时的自动填充
+    public void searchAutoComplete(Observer<AutoCompleteResponse> observer,
+                                   String authorization,
+                                   String word){
+        appApi.searchAutoComplete(authorization, word)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
 
     // 如果token过期则重拿token, 否则执行传入函数动作
     public void chkToken(Context context, AfterComplete afterComplete){
@@ -377,12 +389,20 @@ public class AppRetrofit {
          * 按标签搜索
          *
          */
-        @GET("/v1/search/illust")
+        @GET("/v1/search_icon/illust")
         Observable<IllustsResponse> searchIllust(@Header("Authorization") String authorization,
                                         @Query("word") String word,
                                         @Query("search_target") String search_target,
                                         @Query("sort") String sort,
                                         @Query("filter") String filter);
+
+        /**
+         * 搜索自动填充
+         *
+         */
+        @GET("/v1/search/autocomplete")
+        Observable<AutoCompleteResponse> searchAutoComplete(@Header("Authorization") String authorization,
+                                                            @Query("word") String word);
 
 
     }

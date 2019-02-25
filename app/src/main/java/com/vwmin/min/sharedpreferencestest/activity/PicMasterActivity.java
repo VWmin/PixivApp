@@ -26,6 +26,9 @@ public class PicMasterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE );// 状态栏和导航栏的一些参数设置 这里分别是将布局扩展到状态栏后面和稳定布局
+
         setLayout();
         setControl();
         setListener();

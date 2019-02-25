@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.support.v7.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +41,7 @@ public class MainActivity extends BaseActivity
         implements View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener,
         BottomNavigationView.OnNavigationItemSelectedListener,
-        OnTabSelectListener, SearchView.OnQueryTextListener {
+        OnTabSelectListener {
 
     private NavigationView navigationView;
     private ImageView profile;
@@ -54,8 +53,6 @@ public class MainActivity extends BaseActivity
     private Fragment[] fragments;
     private int current_fragment;
     private Toolbar toolbar;
-//    private TabLayout tab;
-    private SearchView searchView;
     private long exitTime = 0;
 
 
@@ -86,11 +83,8 @@ public class MainActivity extends BaseActivity
         profile = navigationView.getHeaderView(0).findViewById(R.id.profile_img);
         drawer = findViewById(R.id.nav_drawer);
         toolbar = findViewById(R.id.toolbar_open_nav);
-//        tab = findViewById(R.id.tabPage_mine);
 
-
-
-
+        toolbar.setTitle("Pixiv");
 
 
         /* 设置开启drawer */
@@ -105,13 +99,13 @@ public class MainActivity extends BaseActivity
 
         String profile_url = UserInfo.getInstance(this).getProfileUrl();
 
-        if(profile_url != null) {
+        if(profile_url != null)
             Glide.with(this)
                     .load(GlideUriUtil.getImgByUrl(profile_url))
                     .into(profile);
-        }else{
+        else
             profile.setImageResource(R.drawable.no_profile);
-        }
+
 
 
         initFragments();
@@ -128,6 +122,12 @@ public class MainActivity extends BaseActivity
         bottomNav.setOnTabSelectListener(this);
 //        bottomNav.setOnNavigationItemSelectedListener(this);
         toolbar.setNavigationOnClickListener(v -> drawer.openDrawer(Gravity.START, true));
+        // 点搜索图标的响应
+        toolbar.setOnMenuItemClickListener(menuItem -> {
+            Intent intent = new Intent(MainActivity.this, ShowSearchActivity.class);
+            startActivity(intent);
+            return false;
+        });
     }
 
     // 定义 控件 的点击事件
@@ -219,26 +219,9 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.search, menu);
-        searchView = (SearchView) menu.findItem(R.id.search_badge).getActionView();
-        searchView.setOnQueryTextListener(this);
+        getMenuInflater().inflate(R.menu.search_icon, menu);
         return true;
     }
-
-    //
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        Intent intent = new Intent(MainActivity.this, ShowSearchActivity.class);
-        intent.putExtra("query", query);
-        startActivity(intent);
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
-
 
 
     private void initFragments(){

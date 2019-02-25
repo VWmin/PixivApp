@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <litepal>
 
-    <dbname value="ViewHistory"> </dbname>
-    <version value="6"> </version>
+    <dbname value="History"> </dbname>
+    <version value="8"> </version>
 
-    <list>
+    <queryHistories>
         <mapping class="com.vwmin.min.sharedpreferencestest.data.ViewHistory"> </mapping>
-    </list>
+        <mapping class="com.vwmin.min.sharedpreferencestest.data.QueryHistory"> </mapping>
+    </queryHistories>
 
 </litepal>
