@@ -52,7 +52,7 @@ public class TestActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     void setLayout() {
-        setContentView(R.layout.activity_showsearch);
+        setContentView(R.layout.activity_search);
     }
 
     @Override

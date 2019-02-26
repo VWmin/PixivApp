@@ -1,11 +1,19 @@
 package com.vwmin.min.sharedpreferencestest.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -14,6 +22,7 @@ import com.vwmin.min.sharedpreferencestest.R;
 import com.vwmin.min.sharedpreferencestest.adapters.QueryAdapter;
 import com.vwmin.min.sharedpreferencestest.data.QueryHistory;
 import com.vwmin.min.sharedpreferencestest.data.UserInfo;
+import com.vwmin.min.sharedpreferencestest.fragment.frag.FragSearchResult;
 import com.vwmin.min.sharedpreferencestest.network.AppRetrofit;
 import com.vwmin.min.sharedpreferencestest.response.AutoCompleteResponse;
 
@@ -25,19 +34,23 @@ import java.util.List;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class ShowSearchActivity extends BaseActivity implements View.OnClickListener, SearchView.OnQueryTextListener {
+public class SearchActivity extends BaseActivity implements View.OnClickListener, SearchView.OnQueryTextListener {
 
     private SearchView searchView;
     private ImageView goBack;
-    private RecyclerView recyclerView;
+    private RecyclerView queryRecyclerView;
     private TextView clearQueryHistory;
     private TextView searchSuggestion;
     private Button[] buttons = new Button[3];
+    private LinearLayout line_query;
+    private FrameLayout frame_result;
+    private Fragment resultFragment;
     private QueryAdapter adapter;
-    private int searchMod = 0; // 0：插画、漫画    1：小说    2：用户
-    private static final int MOD_MANGA = 0, MOD_NOVEL = 1, MOD_USER = 2;
+    private SearchReceiver searchReceiver;
+    private int searchType = 0; // 0：插画、漫画    1：小说    2：用户
+    private static final int TYPE_MANGA = 0, TYPE_NOVEL = 1, TYPE_USER = 2;
 
-    private List<QueryHistory> queryHistories;
+    private String next_url;
 
 
     @Override
@@ -54,16 +67,19 @@ public class ShowSearchActivity extends BaseActivity implements View.OnClickList
 
     @Override
     void setLayout() {
-        setContentView(R.layout.activity_showsearch);
+        setContentView(R.layout.activity_search);
     }
 
     @Override
     void setControl() {
         searchView = findViewById(R.id.search_badge);
         goBack = findViewById(R.id.activity_search_back);
-        recyclerView = findViewById(R.id.search_list);
+        queryRecyclerView = findViewById(R.id.search_list);
         clearQueryHistory = findViewById(R.id.search_clear);
         searchSuggestion = findViewById(R.id.search_suggestion);
+        line_query = findViewById(R.id.line1);
+        frame_result = findViewById(R.id.recycler_container_search_interface);
+
         buttons[0] = findViewById(R.id.search_button1);
         buttons[1] = findViewById(R.id.search_button2);
         buttons[2] = findViewById(R.id.search_button3);
@@ -77,6 +93,7 @@ public class ShowSearchActivity extends BaseActivity implements View.OnClickList
         TextView textView = findViewById(android.support.v7.appcompat.R.id.search_src_text);
         textView.setTextSize(16);
         textView.setTextColor(getColor(R.color.white));
+        textView.setOnClickListener(v -> switchBack());
 
     }
 
@@ -86,20 +103,19 @@ public class ShowSearchActivity extends BaseActivity implements View.OnClickList
         for(Button b:buttons) b.setOnClickListener(this);
         searchView.setOnQueryTextListener(this);
         clearQueryHistory.setOnClickListener(v-> Operator.deleteAll(QueryHistory.class));
-
     }
 
     void setHistory(){
-        queryHistories = Operator.findAll(QueryHistory.class);
+        List<QueryHistory> queryHistories = Operator.findAll(QueryHistory.class);
         Collections.sort(queryHistories);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        queryRecyclerView.setLayoutManager(layoutManager);
 
         adapter = new QueryAdapter(this);
         adapter.setMod(QueryAdapter.MOD_QUERY_HISTORY);
         adapter.setQueryHistories(queryHistories);
-        recyclerView.setAdapter(adapter);
+        queryRecyclerView.setAdapter(adapter);
 
         clearQueryHistory.setVisibility(View.VISIBLE);
         searchSuggestion.setText("搜索历史");
@@ -128,14 +144,21 @@ public class ShowSearchActivity extends BaseActivity implements View.OnClickList
     public boolean onQueryTextSubmit(String s) {
         QueryHistory queryHistory =  new QueryHistory(s);
         queryHistory.save();
-        switch (searchMod){
-            case MOD_MANGA:
+
+        Bundle args = new Bundle();
+        args.putString("word", s);
+        args.putInt("searchType", searchType);
+
+        switch (searchType){
+            case TYPE_MANGA:
+                resultFragment = FragSearchResult.getInstance(args);
+                switch2Frag();
                 break;
 
-            case MOD_NOVEL:
+            case TYPE_NOVEL:
                 break;
 
-            case MOD_USER:
+            case TYPE_USER:
                 break;
         }
 
@@ -148,7 +171,7 @@ public class ShowSearchActivity extends BaseActivity implements View.OnClickList
             Observer<AutoCompleteResponse> observer = new Observer<AutoCompleteResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
-                    recyclerView.setVisibility(View.INVISIBLE);
+                    queryRecyclerView.setVisibility(View.INVISIBLE);
                     clearQueryHistory.setVisibility(View.INVISIBLE);
                     searchSuggestion.setText("搜索建议 Loading...");
                 }
@@ -156,22 +179,22 @@ public class ShowSearchActivity extends BaseActivity implements View.OnClickList
                 @Override
                 public void onNext(AutoCompleteResponse autoCompleteResponse) {
                     if(autoCompleteResponse!=null){
-                        adapter = new QueryAdapter(ShowSearchActivity.this);
+                        adapter = new QueryAdapter(SearchActivity.this);
                         adapter.setMod(QueryAdapter.MOD_AUTO_COMPLETE);
                         adapter.setAutoCompleteResponses(autoCompleteResponse.getSearch_auto_complete_keywords());
-                        recyclerView.setAdapter(adapter);
+                        queryRecyclerView.setAdapter(adapter);
                     }
                 }
 
                 @Override
                 public void onError(Throwable e) {
-                    recyclerView.setVisibility(View.VISIBLE);
+                    queryRecyclerView.setVisibility(View.VISIBLE);
                     setHistory();
                 }
 
                 @Override
                 public void onComplete() {
-                    recyclerView.setVisibility(View.VISIBLE);
+                    queryRecyclerView.setVisibility(View.VISIBLE);
                     searchSuggestion.setText("搜索建议");
                 }
             };
@@ -180,10 +203,8 @@ public class ShowSearchActivity extends BaseActivity implements View.OnClickList
         return false;
     }
 
-
-
     private void setButtonOnSelected(int position){
-        searchMod = position;
+        searchType = position;
         for(int i=0; i<buttons.length; i++){
             if(i==position){
                 buttons[i].setTextColor(getColor(R.color.white));
@@ -194,6 +215,53 @@ public class ShowSearchActivity extends BaseActivity implements View.OnClickList
             }
         }
     }
+
+    private void switch2Frag(){
+        line_query.setVisibility(View.GONE);
+        frame_result.setVisibility(View.VISIBLE);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (!resultFragment.isAdded())
+            transaction.add(R.id.recycler_container_search_interface, resultFragment);
+
+        transaction.show(resultFragment).commit();
+    }
+
+    private void switchBack(){
+        frame_result.setVisibility(View.GONE);
+        line_query.setVisibility(View.VISIBLE);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if(resultFragment!=null && resultFragment.isAdded())
+            transaction.remove(resultFragment).commit();
+    }
+
+    private class SearchReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String tmpWord = intent.getStringExtra("word");
+            onQueryTextSubmit(tmpWord);
+            TextView textView = findViewById(android.support.v7.appcompat.R.id.search_src_text);
+            textView.setText(tmpWord);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.vwmin.min.sharedpreferencestest.START_SEARCH");
+        searchReceiver = new SearchReceiver();
+        registerReceiver(searchReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(searchReceiver!=null){
+            unregisterReceiver(searchReceiver);
+            searchReceiver = null;
+        }
+    }
+
 }
 
 
@@ -245,13 +313,13 @@ public class ShowSearchActivity extends BaseActivity implements View.OnClickList
 //import java.util.ArrayList;
 //import java.util.List;
 //
-//public class ShowSearchActivity extends BaseActivity implements SearchView.OnQueryTextListener {
+//public class SearchActivity extends BaseActivity implements SearchView.OnQueryTextListener {
 //
 //
 //    private SearchView searchView;
 //
 //    private RefreshLayout refreshLayout;
-//    private RecyclerView recyclerView;
+//    private RecyclerView queryRecyclerView;
 //    private Toolbar toolbar;
 //    private ProgressBar progressBar;
 //    private ImageView imageView;
@@ -275,13 +343,13 @@ public class ShowSearchActivity extends BaseActivity implements View.OnClickList
 //
 //    @Override
 //    void setLayout() {
-//        setContentView(R.layout.activity_showsearch);
+//        setContentView(R.layout.activity_search);
 //    }
 //
 //    @Override
 //    void setControl() {
 ////        refreshLayout = findViewById(R.id.refreshLayout_in_acti_search);
-////        recyclerView = findViewById(R.id.recycle_in_acti_search);
+////        queryRecyclerView = findViewById(R.id.recycle_in_acti_search);
 ////        toolbar = findViewById(R.id.toolbar_show_search_query);
 ////        progressBar = findViewById(R.id.progress_in_acti_search);
 ////        imageView = findViewById(R.id.image_in_acti_search);
@@ -290,9 +358,9 @@ public class ShowSearchActivity extends BaseActivity implements View.OnClickList
 ////        setSupportActionBar(toolbar);
 ////        toolbar.setTitle("搜索");
 ////
-////        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-////        recyclerView.addItemDecoration(new GridItemDecoration(2, Density.dip2px(this, 4.0f), false));
-////        recyclerView.setHasFixedSize(true);
+////        queryRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+////        queryRecyclerView.addItemDecoration(new GridItemDecoration(2, Density.dip2px(this, 4.0f), false));
+////        queryRecyclerView.setHasFixedSize(true);
 ////
 ////        refreshLayout.setRefreshHeader(new DeliveryHeader(this));
 ////        refreshLayout.setOnRefreshListener(refreshLayout -> onRefreshListener());
@@ -323,8 +391,8 @@ public class ShowSearchActivity extends BaseActivity implements View.OnClickList
 ////                    illusts = Illust.parserIllustsResponse(illustsResponse);
 ////                    nextUrl = illustsResponse.getNext_url();
 ////                    if(illusts.size()!=0) {
-////                        illustAdapter = new IllustAdapter(illusts, ShowSearchActivity.this);
-////                        recyclerView.setAdapter(illustAdapter);
+////                        illustAdapter = new IllustAdapter(illusts, SearchActivity.this);
+////                        queryRecyclerView.setAdapter(illustAdapter);
 ////                    }else{
 ////                        imageView.setVisibility(View.VISIBLE);
 ////                    }
@@ -335,7 +403,7 @@ public class ShowSearchActivity extends BaseActivity implements View.OnClickList
 ////            public void onError(Throwable e) {
 ////                progressBar.setVisibility(View.GONE);
 ////                refreshLayout.finishRefresh(true);
-////                Toast.makeText(ShowSearchActivity.this, "加载失败", Toast.LENGTH_SHORT).show();
+////                Toast.makeText(SearchActivity.this, "加载失败", Toast.LENGTH_SHORT).show();
 ////            }
 ////
 ////            @Override
@@ -369,7 +437,7 @@ public class ShowSearchActivity extends BaseActivity implements View.OnClickList
 ////            @Override
 ////            public void onError(Throwable e) {
 ////                refreshLayout.finishLoadMore(true);
-////                Toast.makeText(ShowSearchActivity.this, "加载失败", Toast.LENGTH_SHORT).show();
+////                Toast.makeText(SearchActivity.this, "加载失败", Toast.LENGTH_SHORT).show();
 ////            }
 ////
 ////            @Override

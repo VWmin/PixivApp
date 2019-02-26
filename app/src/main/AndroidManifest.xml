@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.PicDetailActivity" />
-        <activity android:name=".activity.ShowSearchActivity" />
+        <activity android:name=".activity.SearchActivity" />
         <activity android:name=".activity.PicMasterActivity" />
         <activity android:name=".activity.TestActivity" >
 

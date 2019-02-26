@@ -15,13 +15,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.vwmin.min.sharedpreferencestest.R;
-import com.vwmin.min.sharedpreferencestest.activity.ShowSearchActivity;
-import com.vwmin.min.sharedpreferencestest.response.TrendTagsResponse;
+import com.vwmin.min.sharedpreferencestest.activity.SearchActivity;
 import com.vwmin.min.sharedpreferencestest.response.TrendTagsResponse.TrendTagsBean;
 import com.vwmin.min.sharedpreferencestest.utils.GlideUriUtil;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TrendTagAdapter extends RecyclerView.Adapter<TrendTagAdapter.ViewHolder> {
@@ -84,7 +82,7 @@ public class TrendTagAdapter extends RecyclerView.Adapter<TrendTagAdapter.ViewHo
                 .into(viewHolder.imageView);
 
         viewHolder.imageView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ShowSearchActivity.class);
+            Intent intent = new Intent(context, SearchActivity.class);
             intent.putExtra("tag", trendTags.get(i).getTag());
             context.startActivity(intent);
         });

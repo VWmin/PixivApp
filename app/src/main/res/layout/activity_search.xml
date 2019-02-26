@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <android.support.constraint.ConstraintLayout
+    <!--搜索栏和按钮-->
+    <LinearLayout
         android:id="@+id/CustomActionBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/line1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -21,8 +24,8 @@
                 android:id="@+id/activity_search_back"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_marginStart="@dimen/sixteen_dip"
+                android:gravity="center"
                 android:src="@drawable/ic_arrow_back_white_24dp" />
 
             <android.support.v7.widget.SearchView
@@ -41,85 +44,91 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/line2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="@dimen/eight_dip"
-            android:padding="10dp"
-            android:divider="@drawable/divider"
-            android:showDividers="end"
-            app:layout_constraintTop_toBottomOf="@id/line1">
-
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <com.rey.material.widget.Button
                 android:id="@+id/search_button1"
                 android:layout_width="60dp"
-                android:layout_height="30dp"
+                android:layout_height="20dp"
+                android:alpha="0.45"
                 android:background="@color/transport"
                 android:text="插画•漫画"
                 android:textColor="@color/black"
-                android:alpha="0.45"
                 android:textSize="12sp" />
 
             <com.rey.material.widget.Button
                 android:id="@+id/search_button2"
                 android:layout_width="60dp"
-                android:layout_height="30dp"
+                android:layout_height="20dp"
+                android:alpha="0.45"
                 android:background="@color/transport"
                 android:text="小说"
                 android:textColor="@color/black"
-                android:alpha="0.45"
                 android:textSize="12sp" />
 
             <com.rey.material.widget.Button
                 android:id="@+id/search_button3"
                 android:layout_width="60dp"
-                android:layout_height="30dp"
+                android:layout_height="20dp"
+                android:alpha="0.45"
                 android:background="@color/transport"
                 android:text="用户"
                 android:textColor="@color/black"
-                android:alpha="0.45"
                 android:textSize="12sp" />
 
         </LinearLayout>
 
 
+    </LinearLayout>
 
-    </android.support.constraint.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/search_suggestion"
-        android:layout_width="match_parent"
-        android:layout_height="24dp"
-        android:gravity="center_vertical"
-        android:textSize="12sp"
-        android:textColor="@color/gray"
-        android:layout_marginStart="@dimen/sixteen_dip"
-
-        app:layout_constraintTop_toBottomOf="@id/CustomActionBar"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/search_list"
+    <!--待筛选项目-->
+    <LinearLayout
+        android:id="@+id/line1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/search_suggestion"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/search_clear"
+        <TextView
+            android:id="@+id/search_suggestion"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_marginStart="@dimen/sixteen_dip"
+            android:gravity="center_vertical"
+            android:textColor="@color/gray"
+            android:textSize="12sp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/search_clear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="清空搜索记录"
+            android:textColor="@color/gray"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+
+    <!--查询到的项目-->
+    <FrameLayout
+        android:id="@+id/recycler_container_search_interface"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/gray"
-        android:textSize="15sp"
-        android:text="清空搜索记录"
-        app:layout_constraintTop_toBottomOf="@id/search_list"
-        android:gravity="center" />
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+    </FrameLayout>
 
 
-
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
 
 
 

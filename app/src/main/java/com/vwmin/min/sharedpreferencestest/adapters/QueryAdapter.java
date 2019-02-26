@@ -1,6 +1,7 @@
 package com.vwmin.min.sharedpreferencestest.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vwmin.min.sharedpreferencestest.R;
+import com.vwmin.min.sharedpreferencestest.activity.SearchActivity;
 import com.vwmin.min.sharedpreferencestest.data.QueryHistory;
 import com.vwmin.min.sharedpreferencestest.response.AutoCompleteResponse;
 
@@ -62,12 +65,12 @@ public class QueryAdapter extends RecyclerView.Adapter<QueryAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         if(selectedMod == MOD_QUERY_HISTORY) {
             viewHolder.textView.setText(queryHistories.get(i).getQueryContent());
-            viewHolder.textView.setOnClickListener(v -> {});
+            viewHolder.textView.setOnClickListener(v -> postSearch(queryHistories.get(i).getQueryContent()));
             viewHolder.imageView.setVisibility(View.VISIBLE);
             viewHolder.imageView.setOnClickListener(v -> queryHistories.get(i).delete());
         }else if(selectedMod == MOD_AUTO_COMPLETE){
             viewHolder.textView.setText(autoCompleteResponses.get(i));
-            viewHolder.textView.setOnClickListener(v -> {});
+            viewHolder.textView.setOnClickListener(v -> postSearch(autoCompleteResponses.get(i)));
             viewHolder.imageView.setVisibility(View.GONE);
         }
     }
@@ -84,6 +87,13 @@ public class QueryAdapter extends RecyclerView.Adapter<QueryAdapter.ViewHolder> 
                 break;
         }
         return size;
+    }
+
+    private void postSearch(String word){
+        Toast.makeText(context, "你点了一下这行字", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent("com.vwmin.min.sharedpreferencestest.START_SEARCH");
+        intent.putExtra("word", word);
+        context.sendBroadcast(intent);
     }
 
 

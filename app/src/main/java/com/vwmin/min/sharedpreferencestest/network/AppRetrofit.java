@@ -389,7 +389,7 @@ public class AppRetrofit {
          * 按标签搜索
          *
          */
-        @GET("/v1/search_icon/illust")
+        @GET("/v1/search/illust")
         Observable<IllustsResponse> searchIllust(@Header("Authorization") String authorization,
                                         @Query("word") String word,
                                         @Query("search_target") String search_target,

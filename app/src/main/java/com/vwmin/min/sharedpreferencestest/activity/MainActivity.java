@@ -124,7 +124,7 @@ public class MainActivity extends BaseActivity
         toolbar.setNavigationOnClickListener(v -> drawer.openDrawer(Gravity.START, true));
         // 点搜索图标的响应
         toolbar.setOnMenuItemClickListener(menuItem -> {
-            Intent intent = new Intent(MainActivity.this, ShowSearchActivity.class);
+            Intent intent = new Intent(MainActivity.this, SearchActivity.class);
             startActivity(intent);
             return false;
         });
