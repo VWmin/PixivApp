@@ -24,4 +24,20 @@
     <string name="download">下载原图</string>
     <string name="clear_view_history">清空浏览记录</string>
     <string name="signOut">注销</string>
+    <string name="search_target">搜索对象</string>
+    <string name="sort">排序方式</string>
+    <string name="screen">筛选</string>
+    <string name="partial_match_for_tags">与标签部分一致</string>
+    <string name="exact_match_for_tags">与标签完全一致</string>
+    <string name="title_and_caption">匹配标题或说明文字</string>
+
+    <string name="_500user">500users入り</string>
+    <string name="_1000user">1000users入り</string>
+    <string name="_2000user">2000users入り</string>
+    <string name="_5000user">5000users入り</string>
+    <string name="_10000user">10000users入り</string>
+    <string name="_50000user">50000users入り</string>
+    <string name="no_screen">不筛选</string>
+
+
 </resources>

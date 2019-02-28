@@ -44,6 +44,6 @@ public class ActivityCollection {
         activities.get(0).sendBroadcast(intent);
     }
 
-
+    public static Context getTopContext(){return activities.get(0);}
 }
 

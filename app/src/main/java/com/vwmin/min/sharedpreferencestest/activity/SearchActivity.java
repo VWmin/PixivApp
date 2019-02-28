@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,10 +35,11 @@ import java.util.List;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class SearchActivity extends BaseActivity implements View.OnClickListener, SearchView.OnQueryTextListener {
+public class SearchActivity extends BaseActivity implements SearchView.OnQueryTextListener {
 
     private SearchView searchView;
     private ImageView goBack;
+    private ImageView searchSetting;
     private RecyclerView queryRecyclerView;
     private TextView clearQueryHistory;
     private TextView searchSuggestion;
@@ -47,10 +49,13 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private Fragment resultFragment;
     private QueryAdapter adapter;
     private SearchReceiver searchReceiver;
+    private DeleteHistoryReceiver deleteHistoryReceiver;
     private int searchType = 0; // 0：插画、漫画    1：小说    2：用户
     private static final int TYPE_MANGA = 0, TYPE_NOVEL = 1, TYPE_USER = 2;
 
-    private String next_url;
+    public static final int REQUESTCODE_SEARCHSETTING = 1;
+    public static final int RESULTCODE_OK = 1;
+
 
 
     @Override
@@ -74,6 +79,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     void setControl() {
         searchView = findViewById(R.id.search_badge);
         goBack = findViewById(R.id.activity_search_back);
+        searchSetting = findViewById(R.id.search_setting);
         queryRecyclerView = findViewById(R.id.search_list);
         clearQueryHistory = findViewById(R.id.search_clear);
         searchSuggestion = findViewById(R.id.search_suggestion);
@@ -100,9 +106,16 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     @Override
     void setListener() {
         goBack.setOnClickListener(v -> finish());
-        for(Button b:buttons) b.setOnClickListener(this);
+        for(int i=0; i<buttons.length; i++) {
+            final int position = i;
+            buttons[i].setOnClickListener(v -> setButtonOnSelected(position));
+        }
         searchView.setOnQueryTextListener(this);
         clearQueryHistory.setOnClickListener(v-> Operator.deleteAll(QueryHistory.class));
+        searchSetting.setOnClickListener(v -> {
+            Intent intent = new Intent(SearchActivity.this, SearchSettingActivity.class);
+            this.startActivityForResult(intent, REQUESTCODE_SEARCHSETTING);
+        });
     }
 
     void setHistory(){
@@ -119,25 +132,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
         clearQueryHistory.setVisibility(View.VISIBLE);
         searchSuggestion.setText("搜索历史");
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.search_button1:
-                setButtonOnSelected(0);
-                break;
-
-            case R.id.search_button2:
-                setButtonOnSelected(1);
-                break;
-
-
-            case R.id.search_button3:
-                setButtonOnSelected(2);
-                break;
-
-        }
     }
 
     @Override
@@ -232,6 +226,17 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if(resultFragment!=null && resultFragment.isAdded())
             transaction.remove(resultFragment).commit();
+
+        setHistory();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUESTCODE_SEARCHSETTING && resultCode==RESULTCODE_OK){
+            onQueryTextSubmit(searchView.getQuery().toString());
+        }
     }
 
     private class SearchReceiver extends BroadcastReceiver{
@@ -244,13 +249,25 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    private class DeleteHistoryReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setHistory();
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("com.vwmin.min.sharedpreferencestest.START_SEARCH");
+        IntentFilter searchFilter = new IntentFilter();
+        searchFilter.addAction("com.vwmin.min.sharedpreferencestest.START_SEARCH");
         searchReceiver = new SearchReceiver();
-        registerReceiver(searchReceiver, intentFilter);
+        registerReceiver(searchReceiver, searchFilter);
+
+        IntentFilter deleteFilter = new IntentFilter();
+        deleteFilter.addAction("com.vwmin.min.sharedpreferencestest.DELETE_PER_SEARCH_HISTORY");
+        deleteHistoryReceiver = new DeleteHistoryReceiver();
+        registerReceiver(deleteHistoryReceiver, deleteFilter);
     }
 
     @Override
@@ -260,217 +277,10 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             unregisterReceiver(searchReceiver);
             searchReceiver = null;
         }
+        if(deleteHistoryReceiver!=null){
+            unregisterReceiver(deleteHistoryReceiver);
+            deleteHistoryReceiver = null;
+        }
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//package com.vwmin.min.sharedpreferencestest.activity;
-//
-//import android.os.Bundle;
-//import android.support.v4.view.MenuItemCompat;
-//import android.support.v7.widget.GridLayoutManager;
-//import android.support.v7.widget.RecyclerView;
-//import android.support.v7.widget.SearchView;
-//import android.support.v7.widget.Toolbar;
-//import android.view.Menu;
-//import android.view.MenuItem;
-//import android.view.View;
-//import android.widget.ImageView;
-//import android.widget.ProgressBar;
-//
-//import com.scwang.smartrefresh.header.DeliveryHeader;
-//import com.scwang.smartrefresh.layout.api.RefreshLayout;
-//import com.vwmin.min.sharedpreferencestest.R;
-//import com.vwmin.min.sharedpreferencestest.adapters.IllustAdapter;
-//import com.vwmin.min.sharedpreferencestest.response.Illust;
-//import com.vwmin.min.sharedpreferencestest.utils.Density;
-//import com.vwmin.min.sharedpreferencestest.utils.GridItemDecoration;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class SearchActivity extends BaseActivity implements SearchView.OnQueryTextListener {
-//
-//
-//    private SearchView searchView;
-//
-//    private RefreshLayout refreshLayout;
-//    private RecyclerView queryRecyclerView;
-//    private Toolbar toolbar;
-//    private ProgressBar progressBar;
-//    private ImageView imageView;
-//
-//    private IllustAdapter illustAdapter;
-//    private List<Illust> illusts = new ArrayList<>();
-//    private String query;
-//    private String nextUrl;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        getWindow().setStatusBarColor(this.getResources().getColor(R.color.colorPrimary));
-//
-//
-////        setLayout();
-////        setControl();
-////        setListener();
-//
-//    }
-//
-//    @Override
-//    void setLayout() {
-//        setContentView(R.layout.activity_search);
-//    }
-//
-//    @Override
-//    void setControl() {
-////        refreshLayout = findViewById(R.id.refreshLayout_in_acti_search);
-////        queryRecyclerView = findViewById(R.id.recycle_in_acti_search);
-////        toolbar = findViewById(R.id.toolbar_show_search_query);
-////        progressBar = findViewById(R.id.progress_in_acti_search);
-////        imageView = findViewById(R.id.image_in_acti_search);
-////
-////        // 没有这个 自定义的toolbar无法正常显示
-////        setSupportActionBar(toolbar);
-////        toolbar.setTitle("搜索");
-////
-////        queryRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-////        queryRecyclerView.addItemDecoration(new GridItemDecoration(2, Density.dip2px(this, 4.0f), false));
-////        queryRecyclerView.setHasFixedSize(true);
-////
-////        refreshLayout.setRefreshHeader(new DeliveryHeader(this));
-////        refreshLayout.setOnRefreshListener(refreshLayout -> onRefreshListener());
-////        refreshLayout.setOnLoadMoreListener(refreshLayout -> onLoadMoreListener());
-////
-////
-////        onRefreshListener();
-//    }
-//
-//    @Override
-//    void setListener() {
-//        toolbar.setNavigationOnClickListener(v -> {
-//            finish();
-//        });
-//    }
-//
-//
-//    private void onRefreshListener() {
-////        Observer<IllustsResponse> observer = new Observer<IllustsResponse>() {
-////            @Override
-////            public void onSubscribe(Disposable d) {
-////                progressBar.setVisibility(View.VISIBLE);
-////            }
-////
-////            @Override
-////            public void onNext(IllustsResponse illustsResponse) {
-////                if(illustsResponse!=null && illustsResponse.getIllusts()!=null){
-////                    illusts = Illust.parserIllustsResponse(illustsResponse);
-////                    nextUrl = illustsResponse.getNext_url();
-////                    if(illusts.size()!=0) {
-////                        illustAdapter = new IllustAdapter(illusts, SearchActivity.this);
-////                        queryRecyclerView.setAdapter(illustAdapter);
-////                    }else{
-////                        imageView.setVisibility(View.VISIBLE);
-////                    }
-////                }
-////            }
-////
-////            @Override
-////            public void onError(Throwable e) {
-////                progressBar.setVisibility(View.GONE);
-////                refreshLayout.finishRefresh(true);
-////                Toast.makeText(SearchActivity.this, "加载失败", Toast.LENGTH_SHORT).show();
-////            }
-////
-////            @Override
-////            public void onComplete() {
-////                progressBar.setVisibility(View.GONE);
-////                refreshLayout.finishRefresh(true);
-////            }
-////        };
-////        AppRetrofit.getInstance().searchIllust(observer, UserInfo.getInstance(this).getAuthorization(),
-////                 query, "partial_match_for_tags", "date_desc", "for_android");
-//    }
-//
-//    private void onLoadMoreListener(){
-////        Observer<IllustsResponse> observer = new Observer<IllustsResponse>() {
-////            @Override
-////            public void onSubscribe(Disposable d) {
-////
-////            }
-////
-////            @Override
-////            public void onNext(IllustsResponse illustsResponse) {
-////                if(illustsResponse!=null && illustsResponse.getIllusts()!=null){
-////                    nextUrl = illustsResponse.getNext_url();
-////                    illusts.addAll(Illust.parserIllustsResponse(illustsResponse));
-////                    illustAdapter.notifyItemRangeChanged(illusts.size()-illustsResponse.getIllusts().size(),
-////                            illustsResponse.getIllusts().size());
-////                }
-////
-////            }
-////
-////            @Override
-////            public void onError(Throwable e) {
-////                refreshLayout.finishLoadMore(true);
-////                Toast.makeText(SearchActivity.this, "加载失败", Toast.LENGTH_SHORT).show();
-////            }
-////
-////            @Override
-////            public void onComplete() {
-////                refreshLayout.finishLoadMore(true);
-////            }
-////        };
-////        AppRetrofit.getInstance().getNext(observer,
-////                UserInfo.getInstance(this).getAuthorization(), nextUrl);
-//    }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // TODO:搜索框待完善
-////        getMenuInflater().inflate(R.menu.search_function, menu);
-////        searchView = (SearchView) menu.findItem(R.id.search_badge).getActionView();
-////
-////        searchView.setOnQueryTextListener(this);
-//////        searchView.setBackgroundColor(getColor(R.color.white));
-//////        searchView.onActionViewExpanded();
-////        searchView.setMaxWidth(800);
-//////        searchView.setSubmitButtonEnabled(true); // 添加提交按钮
-////        searchView.setQueryHint("输入关键字");
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onQueryTextSubmit(String s) {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean onQueryTextChange(String s) {
-//        return false;
-//    }
-//}

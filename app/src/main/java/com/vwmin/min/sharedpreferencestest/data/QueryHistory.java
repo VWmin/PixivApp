@@ -1,5 +1,7 @@
 package com.vwmin.min.sharedpreferencestest.data;
 
+import android.content.Intent;
+
 import org.litepal.annotation.Column;
 import org.litepal.crud.LitePalSupport;
 import org.litepal.Operator;
@@ -25,7 +27,7 @@ public class QueryHistory extends LitePalSupport implements Comparable<QueryHist
                 .find(QueryHistory.class);
         if (matches.size()!=0){
             matches.get(0).setTime();
-            matches.get(0).update(getId());
+            matches.get(0).updateAll("queryContent = ?", getQueryContent());
             return true;
         }else return super.save();
     }

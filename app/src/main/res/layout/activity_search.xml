@@ -15,7 +15,7 @@
         android:background="@color/colorPrimary"
         android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -24,24 +24,40 @@
                 android:id="@+id/activity_search_back"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/sixteen_dip"
-                android:gravity="center"
-                android:src="@drawable/ic_arrow_back_white_24dp" />
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_arrow_back_white_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <android.support.v7.widget.SearchView
                 android:id="@+id/search_badge"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:icon="@drawable/ic_search_white_24dp"
                 android:orderInCategory="100"
                 android:title="@string/search"
-                app:background="@drawable/shape_searchview"
-                app:layout_constraintLeft_toRightOf="@id/activity_search_back">
+                android:layout_marginStart="@dimen/sixteen_dip"
+                app:layout_constraintStart_toEndOf="@id/activity_search_back">
 
             </android.support.v7.widget.SearchView>
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/search_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/sixteen_dip"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:src="@drawable/baseline_tune_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -129,101 +145,3 @@
 
 
 </LinearLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto">-->
-
-
-    <!--<android.support.design.widget.CoordinatorLayout-->
-        <!--android:id="@+id/linearLayout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-
-        <!--<android.support.design.widget.AppBarLayout-->
-            <!--android:id="@+id/anchor"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:fitsSystemWindows="true"-->
-            <!--android:layout_gravity="top">-->
-
-            <!--<android.support.v7.widget.Toolbar-->
-                <!--android:id="@+id/toolbar_show_search_query"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="?attr/actionBarSize"-->
-                <!--android:background="@color/colorPrimary"-->
-                <!--android:fitsSystemWindows="true"-->
-                <!--app:layout_constraintTop_toTopOf="parent"-->
-                <!--app:layout_scrollFlags="scroll|enterAlways|snap"-->
-                <!--app:navigationIcon="@drawable/ic_arrow_back_white_24dp"-->
-                <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->
-                <!--app:title="@string/search"-->
-                <!--app:titleTextColor="#fff" />-->
-
-        <!--</android.support.design.widget.AppBarLayout>-->
-
-        <!--<FrameLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:background="#ffffff">-->
-
-            <!--<com.scwang.smartrefresh.layout.SmartRefreshLayout-->
-                <!--android:id="@+id/refreshLayout_in_acti_search"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--app:layout_constraintTop_toBottomOf="@+id/anchor">-->
-
-                <!--<android.support.v7.widget.RecyclerView-->
-                    <!--android:id="@+id/recycle_in_acti_search"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent" />-->
-
-
-            <!--</com.scwang.smartrefresh.layout.SmartRefreshLayout>-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/image_in_acti_search"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:scaleType="center"-->
-                <!--android:src="@mipmap/no_result"-->
-                <!--android:visibility="gone" />-->
-
-
-        <!--</FrameLayout>-->
-
-
-    <!--</android.support.design.widget.CoordinatorLayout>-->
-
-
-    <!--<ProgressBar-->
-        <!--android:id="@+id/progress_in_acti_search"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:visibility="gone"-->
-        <!--app:layout_constraintBottom_toBottomOf="@+id/linearLayout"-->
-        <!--app:layout_constraintEnd_toEndOf="@+id/linearLayout"-->
-        <!--app:layout_constraintStart_toStartOf="@+id/linearLayout"-->
-        <!--app:layout_constraintTop_toTopOf="@+id/linearLayout"/>-->
-
-
-<!--</android.support.constraint.ConstraintLayout>-->

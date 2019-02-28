@@ -30,6 +30,9 @@
         <activity android:name=".activity.TestActivity" >
 
         </activity>
+        <activity android:name=".activity.SearchSettingActivity" >
+
+        </activity>
 
     </application>
 

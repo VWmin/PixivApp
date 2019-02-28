@@ -162,53 +162,57 @@ public class FragRcmdFU extends BaseFragment {
     }
 
     private void onLoadMoreListener(){
-        AfterComplete ifTokenOK = new AfterComplete() {
-            @Override
-            public void onSuccess() {
-                {
-                    Observer<IllustsResponse> observer = new Observer<IllustsResponse>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
+        if(nextUrl==null){
+            Toast.makeText(getContext(), "没有更多了哦~", Toast.LENGTH_SHORT).show();
+        }else {
+            AfterComplete ifTokenOK = new AfterComplete() {
+                @Override
+                public void onSuccess() {
+                    {
+                        Observer<IllustsResponse> observer = new Observer<IllustsResponse>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onNext(IllustsResponse illustsResponse) {
-                            if (illustsResponse != null && illustsResponse.getIllusts() != null) {
-                                // 添加到滚动列表
-                                illustList.addAll(Illust.parserIllustsResponse(illustsResponse));
-                                nextUrl = illustsResponse.getNext_url();
-                                illustAdapter.notifyItemRangeChanged(
-                                        illustList.size() - illustsResponse.getIllusts().size(),
-                                        illustsResponse.getIllusts().size());
-                            } else {
+                            @Override
+                            public void onNext(IllustsResponse illustsResponse) {
+                                if (illustsResponse != null && illustsResponse.getIllusts() != null) {
+                                    // 添加到滚动列表
+                                    illustList.addAll(Illust.parserIllustsResponse(illustsResponse));
+                                    nextUrl = illustsResponse.getNext_url();
+                                    illustAdapter.notifyItemRangeChanged(
+                                            illustList.size() - illustsResponse.getIllusts().size(),
+                                            illustsResponse.getIllusts().size());
+                                } else {
+                                    Toast.makeText(getContext(), "加载失败", Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                refreshLayout.finishLoadMore(false);
                                 Toast.makeText(getContext(), "加载失败", Toast.LENGTH_LONG).show();
                             }
-                        }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            refreshLayout.finishLoadMore(false);
-                            Toast.makeText(getContext(), "加载失败", Toast.LENGTH_LONG).show();
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            refreshLayout.finishLoadMore(true);
-                        }
-                    };
-                    AppRetrofit.getInstance().getNext(observer,
-                            UserInfo.getInstance(getContext()).getAuthorization(),
-                            nextUrl);
+                            @Override
+                            public void onComplete() {
+                                refreshLayout.finishLoadMore(true);
+                            }
+                        };
+                        AppRetrofit.getInstance().getNext(observer,
+                                UserInfo.getInstance(getContext()).getAuthorization(),
+                                nextUrl);
+                    }
                 }
-            }
 
-            @Override
-            public void onError() {
+                @Override
+                public void onError() {
 
-            }
-        };
-        AppRetrofit.getInstance().chkToken(getContext(), ifTokenOK);
+                }
+            };
+            AppRetrofit.getInstance().chkToken(getContext(), ifTokenOK);
+        }
     }
 
 }

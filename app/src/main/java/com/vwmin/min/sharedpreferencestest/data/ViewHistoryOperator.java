@@ -16,7 +16,9 @@ public class ViewHistoryOperator {
         List<ViewHistory> matches = Operator.where("illust_id = ?",
                 String.valueOf(illust.getIllust_id())).find(ViewHistory.class);
         if(matches.size()==0) {
-            ViewHistory viewHistory = new ViewHistory(illust);
+            ViewHistory viewHistory = new ViewHistory();
+            viewHistory.init(illust);
+            viewHistory.setTime();
             viewHistory.save();
             Log.d("ViewHistoryOperator", "refreshTime: notFound");
         }else{

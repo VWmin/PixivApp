@@ -2,6 +2,7 @@ package com.vwmin.min.sharedpreferencestest.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -67,7 +68,10 @@ public class QueryAdapter extends RecyclerView.Adapter<QueryAdapter.ViewHolder> 
             viewHolder.textView.setText(queryHistories.get(i).getQueryContent());
             viewHolder.textView.setOnClickListener(v -> postSearch(queryHistories.get(i).getQueryContent()));
             viewHolder.imageView.setVisibility(View.VISIBLE);
-            viewHolder.imageView.setOnClickListener(v -> queryHistories.get(i).delete());
+            viewHolder.imageView.setOnClickListener(v -> {
+                queryHistories.get(i).delete();
+                postRefresh();
+            });
         }else if(selectedMod == MOD_AUTO_COMPLETE){
             viewHolder.textView.setText(autoCompleteResponses.get(i));
             viewHolder.textView.setOnClickListener(v -> postSearch(autoCompleteResponses.get(i)));
@@ -96,5 +100,9 @@ public class QueryAdapter extends RecyclerView.Adapter<QueryAdapter.ViewHolder> 
         context.sendBroadcast(intent);
     }
 
+    private void postRefresh(){
+        Intent intent = new Intent("com.vwmin.min.sharedpreferencestest.DELETE_PER_SEARCH_HISTORY");
+        context.sendBroadcast(intent);
+    }
 
 }
