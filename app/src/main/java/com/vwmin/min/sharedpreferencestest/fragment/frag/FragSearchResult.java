@@ -138,6 +138,8 @@ public class FragSearchResult extends BaseFragment {
     private void onLoadMoreListener(){
         if(nextUrl==null){
             Toast.makeText(getContext(), "没有更多了哦~", Toast.LENGTH_SHORT).show();
+            refreshLayout.finishLoadMore(true);
+
         }else {
             Observer<IllustsResponse> observer = new Observer<IllustsResponse>() {
                 @Override

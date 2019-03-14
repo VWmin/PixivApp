@@ -68,6 +68,12 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         setListener();
         setHistory();
 
+        String externQuery = getIntent().getStringExtra("tag");
+        if(externQuery!=null) onQueryTextSubmit(externQuery);
+        TextView textView = findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        textView.setText(externQuery);
+
+
     }
 
     @Override

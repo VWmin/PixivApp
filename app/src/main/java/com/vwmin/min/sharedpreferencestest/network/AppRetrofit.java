@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.vwmin.min.sharedpreferencestest.activity.ActivityCollection;
 import com.vwmin.min.sharedpreferencestest.response.AutoCompleteResponse;
+import com.vwmin.min.sharedpreferencestest.response.FollowingResponse;
 import com.vwmin.min.sharedpreferencestest.response.IllustResponse;
 import com.vwmin.min.sharedpreferencestest.response.IllustsResponse;
 import com.vwmin.min.sharedpreferencestest.response.LoginResponse;
@@ -198,7 +199,7 @@ public class AppRetrofit {
                 .subscribe(observer);
     }
 
-    // 搜索
+    // 搜索图片
     public void searchIllust(Observer<IllustsResponse> observer,
                              String authorization,
                              String word, String search_target, String sort, String filter){
@@ -214,6 +215,16 @@ public class AppRetrofit {
                                    String authorization,
                                    String word){
         appApi.searchAutoComplete(authorization, word)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    // 获取我关注的人
+    public void userFollowing(Observer<FollowingResponse> observer,
+                              String id, String authorization){
+        appApi.userFollowing(id, authorization)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -386,7 +397,7 @@ public class AppRetrofit {
                                                    @Query("filter") String filter);
 
         /**
-         * 按标签搜索
+         * 搜索图片
          *
          */
         @GET("/v1/search/illust")
@@ -404,6 +415,14 @@ public class AppRetrofit {
         Observable<AutoCompleteResponse> searchAutoComplete(@Header("Authorization") String authorization,
                                                             @Query("word") String word);
 
+
+        /**
+         * 我关注的人
+         *
+         */
+        @GET("/v1/user/following")
+        Observable<FollowingResponse> userFollowing(@Query("user_id") String user_id,
+                                                    @Header("Authorization") String authorization);
 
     }
 

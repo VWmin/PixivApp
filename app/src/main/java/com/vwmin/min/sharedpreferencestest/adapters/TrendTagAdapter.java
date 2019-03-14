@@ -48,10 +48,10 @@ public class TrendTagAdapter extends RecyclerView.Adapter<TrendTagAdapter.ViewHo
             textView = itemView.findViewById(R.id.trendTags_textView);
 
             ViewGroup.LayoutParams lp = imageView.getLayoutParams();
-            lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            lp.height = TrendTagAdapter.SCREEN_WIDTH/3;
+            lp.width = (TrendTagAdapter.SCREEN_WIDTH-4)/3;
+            lp.height = lp.width;
             imageView.setLayoutParams(lp);
-
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
     }
 
@@ -70,10 +70,11 @@ public class TrendTagAdapter extends RecyclerView.Adapter<TrendTagAdapter.ViewHo
         if(i==0) {
             ViewGroup.LayoutParams lp = viewHolder.imageView.getLayoutParams();
             lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            lp.height = (int)(0.618 * TrendTagAdapter.SCREEN_WIDTH) + 100;
-            viewHolder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            lp.height = (int)(0.618 * TrendTagAdapter.SCREEN_WIDTH);
             viewHolder.imageView.setLayoutParams(lp);
         }
+        viewHolder.imageView.setForeground(context.getDrawable(R.drawable.tag_foreground));
+
 
         Glide.with(context)
                 .load(GlideUriUtil.getImgByUrl(trendTags.get(i).getIllust().getImage_urls().getMedium()))

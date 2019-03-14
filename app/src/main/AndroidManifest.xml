@@ -33,6 +33,9 @@
         <activity android:name=".activity.SearchSettingActivity" >
 
         </activity>
+        <activity android:name=".activity.FollowingActivity" >
+
+        </activity>
 
     </application>
 

@@ -143,8 +143,12 @@ public class FragPerPic extends BaseFragment implements View.OnClickListener {
         // 关注
         if(!illust.isUser_isFollowed()) {
             follow.setText("+关注");
+            follow.setTextColor(context.getColor(R.color.black));
+            follow.setBackground(context.getDrawable(R.drawable.btn_bg_white));
         }else{
             follow.setText("✓已关注");
+            follow.setTextColor(context.getColor(R.color.white));
+            follow.setBackground(context.getDrawable(R.drawable.btn_bg_blue));
         }
 
         // 设置张数
@@ -221,6 +225,8 @@ public class FragPerPic extends BaseFragment implements View.OnClickListener {
                 @Override
                 public void onComplete() {
                     follow.setText("✓已关注");
+                    follow.setTextColor(context.getColor(R.color.white));
+                    follow.setBackground(context.getDrawable(R.drawable.btn_bg_blue));
                     Toast.makeText(context, "已关注", Toast.LENGTH_SHORT).show();
                     illust.setUser_isFollowed(true);
                     EventBus.getDefault().post(new IllustChangeEvent(illust));
@@ -251,6 +257,8 @@ public class FragPerPic extends BaseFragment implements View.OnClickListener {
                 @Override
                 public void onComplete() {
                     follow.setText("+关注");
+                    follow.setTextColor(context.getColor(R.color.black));
+                    follow.setBackground(context.getDrawable(R.drawable.btn_bg_white));
                     Toast.makeText(context, "已取消关注", Toast.LENGTH_SHORT).show();
                     illust.setUser_isFollowed(false);
                     EventBus.getDefault().post(new IllustChangeEvent(illust));

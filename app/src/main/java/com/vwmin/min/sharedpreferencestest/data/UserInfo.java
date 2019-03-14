@@ -25,8 +25,8 @@ public class UserInfo {
         SharedPreferences.Editor userPrefEditor = userPref.edit();
 
         /* 用户信息 */
-        userPrefEditor.putBoolean("is_remember",
-                isRemember);
+        userPrefEditor.putBoolean("is_remember", isRemember);
+
         userPrefEditor.putString("id",
                 loginResponse.getResponse().getUser().getId());
         userPrefEditor.putString("name",
@@ -35,8 +35,8 @@ public class UserInfo {
                 loginResponse.getResponse().getUser().getAccount());
         userPrefEditor.putBoolean("is_premium",
                 loginResponse.getResponse().getUser().isIs_premium());
-        userPrefEditor.putString("password",
-                pwd);
+        userPrefEditor.putString("password", pwd);
+
         userPrefEditor.putString("email",
                 loginResponse.getResponse().getUser().getMail_address());
         userPrefEditor.putString("profile_url",
@@ -64,6 +64,7 @@ public class UserInfo {
     }
 
 
+    public String getID(){return userPref.getString("id", null);}
 
     public String getAuthorization(){return userPref.getString("Authorization", "");}
 

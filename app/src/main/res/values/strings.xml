@@ -38,6 +38,8 @@
     <string name="_10000user">10000users入り</string>
     <string name="_50000user">50000users入り</string>
     <string name="no_screen">不筛选</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确认</string>
 
 
 </resources>

@@ -23,23 +23,16 @@ import io.reactivex.disposables.Disposable;
 
 public class FragTrendTag extends BaseFragment {
     private RecyclerView recyclerView;
-    private ProgressBar progressBar;
-    private RefreshLayout refreshLayout;
     private TrendTagAdapter trendTagAdapter;
-
-
-
 
     @Override
     public int setLayoutId() {
-        return R.layout.frag_recycle;
+        return R.layout.frag_recycle_only;
     }
 
     @Override
     public void initView(View view) {
-        recyclerView = view.findViewById(R.id.recycle_in_frag_recycle);
-        progressBar = view.findViewById(R.id.progress_in_frag_recycle);
-        refreshLayout = view.findViewById(R.id.refreshLayout_in_frag_recycle);
+        recyclerView = view.findViewById(R.id.recycle_only);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -51,13 +44,11 @@ public class FragTrendTag extends BaseFragment {
             }
         });
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new GridItemDecoration(3, Density.dip2px(Objects.requireNonNull(getContext()), 1.0f), false));
+        recyclerView.addItemDecoration(new GridItemDecoration(3,
+                Density.dip2px(Objects.requireNonNull(getContext()), 1.0f), false));
         recyclerView.setHasFixedSize(true);
 
 
-        refreshLayout.setRefreshHeader(new DeliveryHeader(getContext()));
-        refreshLayout.setOnRefreshListener(refreshLayout -> onRefreshListener());
-        refreshLayout.setOnLoadMoreListener(refreshLayout -> onLoadMoreListener());
     }
 
     @Override
@@ -86,17 +77,10 @@ public class FragTrendTag extends BaseFragment {
 
             }
         };
-        AppRetrofit.getInstance().getTrendTags(observer,
+        AppRetrofit.getInstance().getTrendTags(
+                observer,
                 UserInfo.getInstance(Objects.requireNonNull(getContext())).getAuthorization(),
                 "for_android");
-    }
-
-    private void onRefreshListener(){
-        refreshLayout.finishRefresh(true);
-    }
-
-    private void onLoadMoreListener(){
-        //refreshLayout.finishLoadMore(true);
     }
 
 

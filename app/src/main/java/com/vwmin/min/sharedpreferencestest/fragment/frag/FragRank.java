@@ -167,6 +167,7 @@ public class FragRank extends BaseFragment {
     private void onLoadMoreListener() {
         if(nextUrl==null){
             Toast.makeText(getContext(), "没有更多了哦~", Toast.LENGTH_SHORT).show();
+            refreshLayout.finishLoadMore(true);
         }else {
             AfterComplete ifTokenOK = new AfterComplete() {
                 @Override

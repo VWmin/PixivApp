@@ -206,7 +206,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="@dimen/sixteen_dip"
                         android:layout_marginTop="27dp"
-                        android:background="@drawable/btn_bg"
+                        android:background="@drawable/btn_bg_blue"
                         android:paddingBottom="2dp"
                         android:paddingEnd="@dimen/eight_dip"
                         android:paddingStart="@dimen/eight_dip"

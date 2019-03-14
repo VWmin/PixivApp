@@ -1,35 +1,22 @@
 package com.vwmin.min.sharedpreferencestest.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.RadioButton;
+import android.widget.Button;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.vwmin.min.sharedpreferencestest.R;
-import com.vwmin.min.sharedpreferencestest.data.AppSetting;
 import com.vwmin.min.sharedpreferencestest.data.SearchSetting;
 
 public class SearchSettingActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
 
     private Toolbar toolbar;
 
-    private RadioGroup target;
-    private RadioGroup screen;
+    private RadioGroup target, screen;
 
-    private RadioButton partial_match_for_tags;
-    private RadioButton exact_match_for_tags;
-    private RadioButton title_and_caption;
+    private String tmpTarget, tmpScreen; //临时的选择数据，确认后保存
 
-    private RadioButton no_screen;
-    private RadioButton user_500;
-    private RadioButton user_1000;
-    private RadioButton user_2000;
-    private RadioButton user_5000;
-    private RadioButton user_10000;
-    private RadioButton user_50000;
+    private Button cancel, confirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,18 +43,8 @@ public class SearchSettingActivity extends BaseActivity implements RadioGroup.On
         target = findViewById(R.id.search_target);
         screen = findViewById(R.id.screen);
 
-        partial_match_for_tags = findViewById(R.id.partial_match_for_tags);
-        exact_match_for_tags = findViewById(R.id.exact_match_for_tags);
-        title_and_caption = findViewById(R.id.title_and_caption);
-
-        no_screen = findViewById(R.id.no_screen);
-        user_500 = findViewById(R.id._500user);
-        user_1000 = findViewById(R.id._1000user);
-        user_2000 = findViewById(R.id._2000user);
-        user_5000 = findViewById(R.id._5000user);
-        user_10000 = findViewById(R.id._10000user);
-        user_50000 = findViewById(R.id._50000user);
-
+        cancel = findViewById(R.id.search_cancel);
+        confirm = findViewById(R.id.search_confirm);
     }
 
     @Override
@@ -75,6 +52,11 @@ public class SearchSettingActivity extends BaseActivity implements RadioGroup.On
         toolbar.setNavigationOnClickListener(v -> finish());
         target.setOnCheckedChangeListener(this);
         screen.setOnCheckedChangeListener(this);
+        cancel.setOnClickListener(v->finish());
+        confirm.setOnClickListener(v->{
+            save();
+            finish();
+        });
     }
 
 
@@ -132,41 +114,61 @@ public class SearchSettingActivity extends BaseActivity implements RadioGroup.On
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId){
             case R.id.partial_match_for_tags:
-                SearchSetting.getInstance(this).setSearch_target(SearchSetting.PARTIAL_MATCH_FOR_TAGS);
+                tmpTarget = SearchSetting.PARTIAL_MATCH_FOR_TAGS;
+//                SearchSetting.getInstance(this).setSearch_target(SearchSetting.PARTIAL_MATCH_FOR_TAGS);
                 break;
 
             case R.id.exact_match_for_tags:
-                SearchSetting.getInstance(this).setSearch_target(SearchSetting.EXACT_MATCH_FOR_TAGS);
+                tmpTarget = SearchSetting.EXACT_MATCH_FOR_TAGS;
+//                SearchSetting.getInstance(this).setSearch_target(SearchSetting.EXACT_MATCH_FOR_TAGS);
                 break;
 
             case R.id.title_and_caption:
-                SearchSetting.getInstance(this).setSearch_target(SearchSetting.TITLE_AND_CAPTION);
+                tmpTarget = SearchSetting.TITLE_AND_CAPTION;
+//                SearchSetting.getInstance(this).setSearch_target(SearchSetting.TITLE_AND_CAPTION);
+                break;
+
+            case R.id.no_screen:
+                tmpScreen = SearchSetting.NO_SCREEN;
+//                SearchSetting.getInstance(this).setScreen(SearchSetting.NO_SCREEN);
                 break;
 
             case R.id._500user:
-                SearchSetting.getInstance(this).setScreen(SearchSetting.USER_500);
+                tmpScreen = SearchSetting.USER_500;
+//                SearchSetting.getInstance(this).setScreen(SearchSetting.USER_500);
                 break;
 
             case R.id._1000user:
-                SearchSetting.getInstance(this).setScreen(SearchSetting.USER_1000);
+                tmpScreen = SearchSetting.USER_1000;
+//                SearchSetting.getInstance(this).setScreen(SearchSetting.USER_1000);
                 break;
 
             case R.id._2000user:
-                SearchSetting.getInstance(this).setScreen(SearchSetting.USER_2000);
+                tmpScreen = SearchSetting.USER_2000;
+//                SearchSetting.getInstance(this).setScreen(SearchSetting.USER_2000);
                 break;
 
             case R.id._5000user:
-                SearchSetting.getInstance(this).setScreen(SearchSetting.USER_5000);
+                tmpScreen = SearchSetting.USER_5000;
+//                SearchSetting.getInstance(this).setScreen(SearchSetting.USER_5000);
                 break;
 
             case R.id._10000user:
-                SearchSetting.getInstance(this).setScreen(SearchSetting.USER_10000);
+                tmpScreen = SearchSetting.USER_10000;
+//                SearchSetting.getInstance(this).setScreen(SearchSetting.USER_10000);
                 break;
 
             case R.id._50000user:
-                SearchSetting.getInstance(this).setScreen(SearchSetting.USER_50000);
+                tmpScreen = SearchSetting.USER_50000;
+//                SearchSetting.getInstance(this).setScreen(SearchSetting.USER_50000);
                 break;
         }
+    }
+
+    private void save(){
+        SearchSetting.getInstance(this).setSearch_target(tmpTarget);
+        SearchSetting.getInstance(this).setScreen(tmpScreen);
         setResult(SearchActivity.RESULTCODE_OK);
     }
+
 }

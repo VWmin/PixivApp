@@ -28,10 +28,16 @@ import com.vwmin.min.sharedpreferencestest.data.ViewHistory;
 import com.vwmin.min.sharedpreferencestest.fragment.MineFragment;
 import com.vwmin.min.sharedpreferencestest.fragment.RankFragment;
 import com.vwmin.min.sharedpreferencestest.fragment.RecommendFragment;
+import com.vwmin.min.sharedpreferencestest.network.AppRetrofit;
+import com.vwmin.min.sharedpreferencestest.response.FollowingResponse;
 import com.vwmin.min.sharedpreferencestest.utils.GlideUriUtil;
 import com.vwmin.min.sharedpreferencestest.data.UserInfo;
 
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 import static org.litepal.Operator.deleteAll;
 import static org.litepal.Operator.findAll;
@@ -99,12 +105,10 @@ public class MainActivity extends BaseActivity
 
         String profile_url = UserInfo.getInstance(this).getProfileUrl();
 
-        if(profile_url != null)
-            Glide.with(this)
-                    .load(GlideUriUtil.getImgByUrl(profile_url))
-                    .into(profile);
-        else
-            profile.setImageResource(R.drawable.no_profile);
+        if(profile_url != null) Glide.with(this)
+                                .load(GlideUriUtil.getImgByUrl(profile_url))
+                                .into(profile);
+        else profile.setImageResource(R.drawable.no_profile);
 
 
 
@@ -159,6 +163,8 @@ public class MainActivity extends BaseActivity
 
             /* 这是侧边的 */
             case R.id.menu_item_following:
+                Intent intent = new Intent(MainActivity.this, FollowingActivity.class);
+                startActivity(intent);
                 break;
             case R.id.menu_item_recommend_users:
                 break;
